@@ -516,7 +516,7 @@ export function Factory() {
                       className={`px-2 py-1 rounded-lg text-xs font-medium ${partStatus.bg} ${partStatus.color} transition-transform duration-200 hover:scale-110`}
                     >
                       {partStatus.label}
-                    </motion.span>
+                    </span>
                   </div>
                 </motion.div>
               );
