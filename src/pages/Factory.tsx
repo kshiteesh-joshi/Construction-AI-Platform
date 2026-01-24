@@ -461,7 +461,7 @@ export function Factory() {
             </div>
           </div>
 
-          <div className="space-y-2 max-h-[500px] overflow-y-auto">
+          <div className="space-y-2 max-h-[500px] overflow-y-auto custom-scrollbar">
             {mockParts.map((part, index) => {
               const materialColor = MATERIAL_COLORS[part.material as MaterialType];
               const partStatus = partStatusConfig[part.status];
@@ -473,21 +473,18 @@ export function Factory() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05, type: "spring", stiffness: 200 }}
                   className="p-3 rounded-xl bg-slate-800/40 border border-slate-700/30 hover:border-primary-500/40 transition-all duration-300 relative overflow-hidden group"
-                  whileHover={{ scale: 1.02, x: 5 }}
+                  whileHover={{ scale: 1.01 }}
+                  style={{ pointerEvents: 'auto' }}
                 >
                   {/* Hover glow */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-primary-500/5 to-transparent"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-r from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   />
                   
                   <div className="flex items-center gap-3 relative z-10">
-                    <motion.div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden relative"
+                    <div
+                      className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden relative transition-transform duration-300 hover:rotate-12 hover:scale-110"
                       style={{ backgroundColor: materialColor.light }}
-                      whileHover={{ rotate: 360, scale: 1.1 }}
-                      transition={{ duration: 0.6 }}
                     >
                       {getPartImage(part.name) ? (
                         <img src={getPartImage(part.name)} alt={part.name} className="absolute inset-0 w-full h-full object-cover" />
@@ -495,32 +492,28 @@ export function Factory() {
                         <img src={materialColor.image} alt={materialColor.name} className="absolute inset-0 w-full h-full object-cover opacity-80" />
                       )}
                       <span className="text-xs font-bold text-white relative z-10 drop-shadow-lg bg-black/30 px-1 rounded">{part.sequence}</span>
-                    </motion.div>
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <motion.p 
-                          className="font-medium text-white text-sm truncate"
-                          whileHover={{ x: 3 }}
+                        <p 
+                          className="font-medium text-white text-sm truncate transition-transform duration-200 group-hover:translate-x-1"
                         >
                           {part.name}
-                        </motion.p>
+                        </p>
                         {part.tag && (
-                          <motion.span 
-                            className="px-1.5 py-0.5 rounded bg-slate-700 text-xs text-slate-400 font-mono"
-                            whileHover={{ scale: 1.1 }}
+                          <span 
+                            className="px-1.5 py-0.5 rounded bg-slate-700 text-xs text-slate-400 font-mono transition-transform duration-200 hover:scale-110"
                           >
                             {part.tag}
-                          </motion.span>
+                          </span>
                         )}
                       </div>
                       <p className="text-xs text-slate-500">
                         {materialColor.name} · {part.dimensions.width}×{part.dimensions.height}×{part.dimensions.depth}mm
                       </p>
                     </div>
-                    <motion.span 
-                      className={`px-2 py-1 rounded-lg text-xs font-medium ${partStatus.bg} ${partStatus.color}`}
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ type: "spring", stiffness: 400 }}
+                    <span 
+                      className={`px-2 py-1 rounded-lg text-xs font-medium ${partStatus.bg} ${partStatus.color} transition-transform duration-200 hover:scale-110`}
                     >
                       {partStatus.label}
                     </motion.span>
