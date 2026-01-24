@@ -19,12 +19,84 @@ import {
 import { MATERIAL_COLORS, type MaterialType, type MaterialRequirement, type ComplianceCheck } from '../types';
 
 const mockMaterialRequirements: MaterialRequirement[] = [
-  { material: 'bamboo', quantity: 1250, unit: 'm²', loadRequirement: 500 },
-  { material: 'recycled-wood', quantity: 840, unit: 'm²', loadRequirement: 750 },
-  { material: 'hemp-concrete', quantity: 320, unit: 'm³', loadRequirement: 300 },
-  { material: 'mycelium', quantity: 180, unit: 'm²', loadRequirement: 50 },
-  { material: 'recycled-steel', quantity: 45, unit: 'tons', loadRequirement: 2000 },
-  { material: 'cork', quantity: 560, unit: 'm²', loadRequirement: 100 },
+  { 
+    material: 'bamboo', 
+    quantity: 1250, 
+    unit: 'm²', 
+    loadRequirement: 500,
+    density: 700,
+    carbonFootprint: 12,
+    recyclability: 95,
+    durability: 25,
+    supplier: 'GreenBamboo Co.',
+    estimatedCost: 45000,
+    deliveryTime: 14
+  },
+  { 
+    material: 'recycled-wood', 
+    quantity: 840, 
+    unit: 'm²', 
+    loadRequirement: 750,
+    density: 650,
+    carbonFootprint: 18,
+    recyclability: 100,
+    durability: 30,
+    supplier: 'EcoWood Industries',
+    estimatedCost: 38000,
+    deliveryTime: 10
+  },
+  { 
+    material: 'hemp-concrete', 
+    quantity: 320, 
+    unit: 'm³', 
+    loadRequirement: 300,
+    density: 400,
+    carbonFootprint: 35,
+    recyclability: 85,
+    durability: 50,
+    supplier: 'HempBuild Ltd.',
+    estimatedCost: 52000,
+    deliveryTime: 21
+  },
+  { 
+    material: 'mycelium', 
+    quantity: 180, 
+    unit: 'm²', 
+    loadRequirement: 50,
+    density: 180,
+    carbonFootprint: 5,
+    recyclability: 100,
+    durability: 15,
+    supplier: 'MycoMaterials',
+    estimatedCost: 12000,
+    deliveryTime: 7
+  },
+  { 
+    material: 'recycled-steel', 
+    quantity: 45, 
+    unit: 'tons', 
+    loadRequirement: 2000,
+    density: 7850,
+    carbonFootprint: 450,
+    recyclability: 100,
+    durability: 100,
+    supplier: 'SteelCycle Corp.',
+    estimatedCost: 95000,
+    deliveryTime: 18
+  },
+  { 
+    material: 'cork', 
+    quantity: 560, 
+    unit: 'm²', 
+    loadRequirement: 100,
+    density: 240,
+    carbonFootprint: 8,
+    recyclability: 90,
+    durability: 40,
+    supplier: 'CorkNature Inc.',
+    estimatedCost: 28000,
+    deliveryTime: 12
+  },
 ];
 
 const mockComplianceChecks: ComplianceCheck[] = [
@@ -467,32 +539,97 @@ export function Blueprint() {
                   </motion.button>
                 </div>
                 
-                <div className="space-y-3 max-h-80 overflow-y-auto">
-                  {mockMaterialRequirements.map((req) => {
+                <div className="space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar">
+                  {mockMaterialRequirements.map((req, index) => {
                     const colors = MATERIAL_COLORS[req.material];
                     return (
                       <motion.div
                         key={req.material}
-                        className="flex items-center justify-between p-3 rounded-xl bg-slate-800/40 border border-slate-700/30 hover:border-primary-500/30 transition-all"
-                        whileHover={{ scale: 1.01 }}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/30 hover:border-primary-500/30 transition-all"
+                        whileHover={{ scale: 1.01, y: -2 }}
                       >
-                        <div className="flex items-center gap-3">
-                          {colors.image ? (
-                            <div className="w-12 h-12 rounded-lg overflow-hidden ring-2 ring-slate-600/50">
-                              <img src={colors.image} alt={colors.name} className="w-full h-full object-cover" />
+                        {/* Header */}
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            {colors.image ? (
+                              <div className="w-14 h-14 rounded-lg overflow-hidden ring-2 ring-slate-600/50">
+                                <img src={colors.image} alt={colors.name} className="w-full h-full object-cover" />
+                              </div>
+                            ) : (
+                              <div className="w-14 h-14 rounded-lg" style={{ backgroundColor: colors.light }} />
+                            )}
+                            <div>
+                              <p className="font-semibold text-white text-lg">{colors.name}</p>
+                              <p className="text-sm text-slate-400">{req.supplier}</p>
                             </div>
-                          ) : (
-                            <div className="w-12 h-12 rounded-lg" style={{ backgroundColor: colors.light }} />
-                          )}
-                          <div>
-                            <p className="font-medium text-white">{colors.name}</p>
-                            <p className="text-sm text-slate-500">Load: {req.loadRequirement} kg/m²</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-display font-bold text-white text-xl">{req.quantity.toLocaleString()}</p>
+                            <p className="text-sm text-slate-400">{req.unit}</p>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <p className="font-display font-bold text-white">{req.quantity.toLocaleString()}</p>
-                          <p className="text-sm text-slate-500">{req.unit}</p>
+
+                        {/* Parameters Grid */}
+                        <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-slate-700/30">
+                          <div className="flex items-center gap-2">
+                            <Scale className="w-3.5 h-3.5 text-primary-400" />
+                            <div>
+                              <p className="text-xs text-slate-500">Load Capacity</p>
+                              <p className="text-sm font-semibold text-white">{req.loadRequirement} kg/m²</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center gap-2">
+                            <Box className="w-3.5 h-3.5 text-blue-400" />
+                            <div>
+                              <p className="text-xs text-slate-500">Density</p>
+                              <p className="text-sm font-semibold text-white">{req.density} kg/m³</p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <Leaf className="w-3.5 h-3.5 text-green-400" />
+                            <div>
+                              <p className="text-xs text-slate-500">Carbon Footprint</p>
+                              <p className="text-sm font-semibold text-white">{req.carbonFootprint} kg CO₂</p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-3.5 h-3.5 text-yellow-400" />
+                            <div>
+                              <p className="text-xs text-slate-500">Recyclability</p>
+                              <p className="text-sm font-semibold text-white">{req.recyclability}%</p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <Zap className="w-3.5 h-3.5 text-orange-400" />
+                            <div>
+                              <p className="text-xs text-slate-500">Durability</p>
+                              <p className="text-sm font-semibold text-white">{req.durability} years</p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <ArrowRight className="w-3.5 h-3.5 text-purple-400" />
+                            <div>
+                              <p className="text-xs text-slate-500">Delivery</p>
+                              <p className="text-sm font-semibold text-white">{req.deliveryTime} days</p>
+                            </div>
+                          </div>
                         </div>
+
+                        {/* Cost */}
+                        {req.estimatedCost && (
+                          <div className="mt-3 pt-3 border-t border-slate-700/30 flex items-center justify-between">
+                            <span className="text-sm text-slate-400">Estimated Cost</span>
+                            <span className="text-lg font-bold text-primary-400">${req.estimatedCost.toLocaleString()}</span>
+                          </div>
+                        )}
                       </motion.div>
                     );
                   })}

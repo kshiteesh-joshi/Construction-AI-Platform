@@ -37,8 +37,13 @@ export interface MaterialRequirement {
   quantity: number;
   unit: string;
   loadRequirement: number;
+  density: number; // kg/m³
+  carbonFootprint: number; // kg CO₂/unit
+  recyclability: number; // percentage
+  durability: number; // years
   supplier?: string;
   estimatedCost?: number;
+  deliveryTime?: number; // days
 }
 
 export interface ComplianceReport {
