@@ -345,7 +345,6 @@ export function Construction() {
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="status-badge-success">
-                    <Activity className="w-4 h-4" />
                     In Progress
                   </span>
                   <span className="text-slate-500">Phase 3 / 6</span>
