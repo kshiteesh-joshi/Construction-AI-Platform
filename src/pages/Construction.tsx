@@ -6,7 +6,7 @@ import {
   ChevronDown,
   CheckCircle2,
   Clock,
-  Play,
+  Activity,
   AlertTriangle,
   Package,
   MapPin,
@@ -91,7 +91,7 @@ const currentPhaseParts: BuildingPart[] = [
 
 const phaseStatusConfig = {
   pending: { color: 'text-slate-400', bg: 'bg-slate-500/20', border: 'border-slate-500/30', icon: Clock, label: 'Pending' },
-  'in-progress': { color: 'text-primary-400', bg: 'bg-primary-500/20', border: 'border-primary-500/30', icon: Play, label: 'In Progress' },
+  'in-progress': { color: 'text-primary-400', bg: 'bg-primary-500/20', border: 'border-primary-500/30', icon: Activity, label: 'In Progress' },
   completed: { color: 'text-secondary-400', bg: 'bg-secondary-500/20', border: 'border-secondary-500/30', icon: CheckCircle2, label: 'Completed' },
 };
 
@@ -345,7 +345,7 @@ export function Construction() {
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="status-badge-success">
-                    <Play className="w-4 h-4" />
+                    <Activity className="w-4 h-4" />
                     In Progress
                   </span>
                   <span className="text-slate-500">Phase 3 / 6</span>
