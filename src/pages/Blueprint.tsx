@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Upload,
@@ -209,6 +210,7 @@ const itemVariants = {
 type Step = 'upload' | 'processing' | 'result';
 
 export function Blueprint() {
+  const navigate = useNavigate();
   const [step, setStep] = useState<Step>('upload');
   const [uploadedFiles, setUploadedFiles] = useState<{ scene?: File; blueprint?: File }>({});
   const [isDragging, setIsDragging] = useState(false);
@@ -768,6 +770,7 @@ export function Blueprint() {
               </motion.button>
               <motion.button 
                 className="btn-primary flex items-center gap-2"
+                onClick={() => navigate('/factory')}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
