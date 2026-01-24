@@ -91,13 +91,13 @@ export interface ConstructionPhase {
   actualDuration?: number;
 }
 
-export const MATERIAL_COLORS: Record<MaterialType, { light: string; dark: string; name: string }> = {
-  'bamboo': { light: '#a3c585', dark: '#7ea05c', name: 'Bamboo' },
-  'recycled-wood': { light: '#c4a574', dark: '#9e7d4d', name: 'Recycled Wood' },
-  'mycelium': { light: '#e8dcc8', dark: '#c9b99a', name: 'Mycelium' },
-  'hemp-concrete': { light: '#d4c8b8', dark: '#a89880', name: 'Hempcrete' },
-  'recycled-steel': { light: '#9ca3af', dark: '#6b7280', name: 'Recycled Steel' },
-  'cork': { light: '#d4a574', dark: '#b8875a', name: 'Cork' },
+export const MATERIAL_COLORS: Record<MaterialType, { light: string; dark: string; name: string; image?: string }> = {
+  'bamboo': { light: '#a3c585', dark: '#7ea05c', name: 'Bamboo', image: '/bamboo.webp' },
+  'recycled-wood': { light: '#c4a574', dark: '#9e7d4d', name: 'Recycled Wood', image: '/recyclewood.jpeg' },
+  'mycelium': { light: '#e8dcc8', dark: '#c9b99a', name: 'Mycelium', image: '/mycelium.jpeg' },
+  'hemp-concrete': { light: '#d4c8b8', dark: '#a89880', name: 'Hempcrete', image: '/hempcrete.jpg' },
+  'recycled-steel': { light: '#9ca3af', dark: '#6b7280', name: 'Recycled Steel', image: '/recycle_steel.jpg' },
+  'cork': { light: '#d4a574', dark: '#b8875a', name: 'Cork', image: '/cork.webp' },
   'straw-bale': { light: '#e8d59c', dark: '#c9b060', name: 'Straw Bale' },
   'rammed-earth': { light: '#b89878', dark: '#8b6d50', name: 'Rammed Earth' },
 };

@@ -173,7 +173,7 @@ export function Blueprint() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img 
-            src="/blueprint-sketch.jpg" 
+            src="/blueprint.jpg" 
             alt="Blueprint" 
             className="w-full h-full object-cover opacity-30"
           />
@@ -369,7 +369,7 @@ export function Blueprint() {
           >
             {/* Background animation */}
             <div className="absolute inset-0 opacity-10">
-              <img src="/blueprint-sketch.jpg" alt="" className="w-full h-full object-cover" />
+              <img src="/blueprint.jpg" alt="" className="w-full h-full object-cover" />
             </div>
             
             <div className="relative">
@@ -477,7 +477,13 @@ export function Blueprint() {
                         whileHover={{ scale: 1.01 }}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg" style={{ backgroundColor: colors.light }} />
+                          {colors.image ? (
+                            <div className="w-12 h-12 rounded-lg overflow-hidden ring-2 ring-slate-600/50">
+                              <img src={colors.image} alt={colors.name} className="w-full h-full object-cover" />
+                            </div>
+                          ) : (
+                            <div className="w-12 h-12 rounded-lg" style={{ backgroundColor: colors.light }} />
+                          )}
                           <div>
                             <p className="font-medium text-white">{colors.name}</p>
                             <p className="text-sm text-slate-500">Load: {req.loadRequirement} kg/m²</p>

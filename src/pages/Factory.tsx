@@ -306,10 +306,13 @@ export function Factory() {
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center"
+                      className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden relative"
                       style={{ backgroundColor: materialColor.light }}
                     >
-                      <span className="text-xs font-bold text-slate-800">{part.sequence}</span>
+                      {materialColor.image && (
+                        <img src={materialColor.image} alt={materialColor.name} className="absolute inset-0 w-full h-full object-cover opacity-80" />
+                      )}
+                      <span className="text-xs font-bold text-white relative z-10 drop-shadow-md">{part.sequence}</span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">

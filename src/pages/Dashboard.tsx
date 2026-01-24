@@ -245,11 +245,11 @@ export function Dashboard() {
           {/* Wood Background */}
           <div className="absolute inset-0">
             <img 
-              src="/wood.jpg" 
-              alt="Wood texture" 
-              className="w-full h-full object-cover opacity-20"
+              src="/bamboo.webp" 
+              alt="Green Bamboo" 
+              className="w-full h-full object-cover opacity-40"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/90 to-slate-900/95" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/70 to-slate-900/85" />
           </div>
           
           <div className="relative glass-panel p-6 bg-transparent border-slate-700/30">

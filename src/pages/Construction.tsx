@@ -155,8 +155,8 @@ export function Construction() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img 
-            src="/stone.jpg" 
-            alt="Stone texture" 
+            src="/hempcrete.jpg" 
+            alt="Hempcrete blocks" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/85 to-slate-900/70" />
@@ -440,7 +440,11 @@ export function Construction() {
                           <span className="w-8 h-8 rounded-lg bg-slate-700/50 flex items-center justify-center text-sm font-mono text-slate-400">
                             {mode === 'disassemble' ? currentPhaseParts.length - index : index + 1}
                           </span>
-                          <div className="w-12 h-12 rounded-xl" style={{ backgroundColor: materialColor.light }} />
+                          <div className="w-12 h-12 rounded-xl overflow-hidden relative" style={{ backgroundColor: materialColor.light }}>
+                            {materialColor.image && (
+                              <img src={materialColor.image} alt={materialColor.name} className="absolute inset-0 w-full h-full object-cover" />
+                            )}
+                          </div>
                         </div>
                         
                         <div className="flex-1 min-w-0">
