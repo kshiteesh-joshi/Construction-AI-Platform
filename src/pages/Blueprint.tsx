@@ -25,20 +25,6 @@ interface ExtendedMaterialRequirement extends MaterialRequirement {
 
 const mockMaterialRequirements: ExtendedMaterialRequirement[] = [
   { 
-    material: 'bamboo', 
-    quantity: 485,
-    unit: 'm²', 
-    loadRequirement: 500,
-    density: 700,
-    carbonFootprint: 12,
-    recyclability: 95,
-    durability: 25,
-    supplier: 'GreenBamboo Co.',
-    estimatedCost: 29100,
-    deliveryTime: 14,
-    application: 'Floor joists, roof rafters, structural beams'
-  },
-  { 
     material: 'recycled-wood', 
     quantity: 320,
     unit: 'm²', 
@@ -51,6 +37,20 @@ const mockMaterialRequirements: ExtendedMaterialRequirement[] = [
     estimatedCost: 25600,
     deliveryTime: 10,
     application: 'Wall studs, interior framing, partitions'
+  },
+  { 
+    material: 'bamboo', 
+    quantity: 485,
+    unit: 'm²', 
+    loadRequirement: 500,
+    density: 700,
+    carbonFootprint: 12,
+    recyclability: 95,
+    durability: 25,
+    supplier: 'GreenBamboo Co.',
+    estimatedCost: 29100,
+    deliveryTime: 14,
+    application: 'Floor joists, roof rafters, structural beams'
   },
   { 
     material: 'hemp-concrete', 
