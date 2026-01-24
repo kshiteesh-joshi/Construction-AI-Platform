@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Factory as FactoryIcon,
   Bot,
@@ -339,12 +339,14 @@ export function Factory() {
               return (
                 <motion.div
                   key={robot.id}
-                  className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer ${
+                  className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer relative ${
                     selectedRobot === robot.id
-                      ? 'bg-slate-700/50 border-primary-500/50'
+                      ? 'bg-slate-700/50 border-primary-500/50 ring-2 ring-primary-500/30'
                       : 'bg-slate-800/40 border-slate-700/30 hover:border-primary-500/30'
                   }`}
-                  onClick={() => setSelectedRobot(robot.id === selectedRobot ? null : robot.id)}
+                  onClick={() => {
+                    setSelectedRobot(robot.id === selectedRobot ? null : robot.id);
+                  }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -410,47 +412,53 @@ export function Factory() {
           </div>
 
           {/* Video Player */}
-          {selectedRobot && ROBOT_VIDEOS[selectedRobot] && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.3 }}
-              className="mt-6"
-            >
-              <div className="rounded-xl overflow-hidden border border-slate-700/50 bg-slate-800/40">
-                <div className="p-4 border-b border-slate-700/50 flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                    <Package className="w-4 h-4 text-primary-400" />
-                    Robot Camera Feed: {robots.find(r => r.id === selectedRobot)?.name}
-                  </h3>
-                  <motion.button
-                    onClick={() => setSelectedRobot(null)}
-                    className="text-slate-400 hover:text-white transition-colors"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </motion.button>
+          <AnimatePresence mode="wait">
+            {selectedRobot && ROBOT_VIDEOS[selectedRobot] && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="mt-6 w-full flex justify-center"
+              >
+                <div className="w-full max-w-md rounded-xl overflow-hidden border border-slate-700/50 bg-slate-800/40 shadow-xl">
+                  <div className="px-3 py-1.5 border-b border-slate-700/50 flex items-center justify-between bg-slate-900/50">
+                    <h3 className="text-xs font-semibold text-white flex items-center gap-1.5">
+                      <Package className="w-3 h-3 text-primary-400" />
+                      {robots.find(r => r.id === selectedRobot)?.name}
+                    </h3>
+                    <motion.button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedRobot(null);
+                      }}
+                      className="text-slate-400 hover:text-white transition-colors p-0.5 hover:bg-slate-700/50 rounded"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </motion.button>
+                  </div>
+                  <div className="relative bg-black" style={{ height: '200px' }}>
+                    <video
+                      key={selectedRobot}
+                      className="w-full h-full object-contain"
+                      controls
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    >
+                      <source src={ROBOT_VIDEOS[selectedRobot]} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
                 </div>
-                <div className="relative aspect-video bg-black">
-                  <video
-                    key={selectedRobot}
-                    className="w-full h-full object-cover"
-                    controls
-                    autoPlay
-                    loop
-                    muted
-                  >
-                    <source src={ROBOT_VIDEOS[selectedRobot]} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         {/* Parts queue */}
