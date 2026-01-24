@@ -344,7 +344,7 @@ export function Construction() {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="status-badge-success">
+                  <span className="text-primary-400 font-medium">
                     In Progress
                   </span>
                   <span className="text-slate-500">Phase 3 / 6</span>
