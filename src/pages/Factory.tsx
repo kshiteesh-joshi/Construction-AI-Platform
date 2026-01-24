@@ -24,6 +24,12 @@ const ROBOT_IMAGES = [
   '/cutting_robot4.jpg',
 ];
 
+// Robot video mapping
+const ROBOT_VIDEOS: Record<string, string> = {
+  'r1': '/bamboo.mp4',
+  'r2': '/wood.mp4',
+};
+
 const mockRobots: CuttingRobot[] = [
   { id: 'r1', name: 'Cutting Robot A-01', status: 'cutting', currentPart: 'BM-0847', progress: 67, partsCompleted: 234, totalParts: 350 },
   { id: 'r2', name: 'Cutting Robot A-02', status: 'cutting', currentPart: 'RW-1203', progress: 23, partsCompleted: 189, totalParts: 350 },
@@ -402,6 +408,49 @@ export function Factory() {
               );
             })}
           </div>
+
+          {/* Video Player */}
+          {selectedRobot && ROBOT_VIDEOS[selectedRobot] && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="mt-6"
+            >
+              <div className="rounded-xl overflow-hidden border border-slate-700/50 bg-slate-800/40">
+                <div className="p-4 border-b border-slate-700/50 flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                    <Package className="w-4 h-4 text-primary-400" />
+                    Robot Camera Feed: {robots.find(r => r.id === selectedRobot)?.name}
+                  </h3>
+                  <motion.button
+                    onClick={() => setSelectedRobot(null)}
+                    className="text-slate-400 hover:text-white transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </motion.button>
+                </div>
+                <div className="relative aspect-video bg-black">
+                  <video
+                    key={selectedRobot}
+                    className="w-full h-full object-cover"
+                    controls
+                    autoPlay
+                    loop
+                    muted
+                  >
+                    <source src={ROBOT_VIDEOS[selectedRobot]} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
 
         {/* Parts queue */}
