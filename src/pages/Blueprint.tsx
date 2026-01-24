@@ -836,11 +836,12 @@ export function Blueprint() {
               </div>
 
               {/* Image */}
-              <div className="w-full h-full overflow-auto">
+              <div className="w-full h-[90vh] overflow-auto flex items-start justify-center p-4 bg-slate-800/50">
                 <img
                   src="/audit.png"
                   alt="Compliance Audit Report"
-                  className="w-full h-auto"
+                  className="max-w-full h-auto object-contain"
+                  style={{ maxHeight: 'calc(90vh - 6rem)' }}
                 />
               </div>
             </motion.div>
