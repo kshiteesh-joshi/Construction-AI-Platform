@@ -107,13 +107,21 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.08 },
+    transition: { staggerChildren: 0.1 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 260,
+      damping: 20
+    }
+  },
 };
 
 export function Construction() {
@@ -427,43 +435,84 @@ export function Construction() {
                   return (
                     <motion.div
                       key={part.id}
-                      className={`p-4 rounded-xl border transition-all duration-200 ${
+                      initial={{ opacity: 0, x: mode === 'build' ? -30 : 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: mode === 'build' ? 30 : -30 }}
+                      transition={{ delay: index * 0.05, type: "spring", stiffness: 200 }}
+                      className={`p-4 rounded-xl border transition-all duration-300 relative overflow-hidden group ${
                         canInstall
-                          ? 'bg-primary-500/10 border-primary-500/30'
-                          : 'bg-slate-800/40 border-slate-700/30'
+                          ? 'bg-primary-500/10 border-primary-500/40 shadow-lg shadow-primary-500/10'
+                          : 'bg-slate-800/40 border-slate-700/30 hover:border-slate-600/50'
                       }`}
-                      whileHover={{ scale: 1.01 }}
+                      whileHover={{ scale: 1.02, x: 5 }}
                     >
-                      <div className="flex items-center gap-4">
+                      {/* Animated glow for installable parts */}
+                      {canInstall && (
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-primary-500/20 to-transparent"
+                          animate={{ opacity: [0.3, 0.6, 0.3] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
+                      )}
+                      
+                      <div className="flex items-center gap-4 relative z-10">
                         <div className="flex items-center gap-3">
-                          <span className="w-8 h-8 rounded-lg bg-slate-700/50 flex items-center justify-center text-sm font-mono text-slate-400">
+                          <motion.span 
+                            className="w-8 h-8 rounded-lg bg-slate-700/50 flex items-center justify-center text-sm font-mono text-slate-400"
+                            whileHover={{ rotate: 360, scale: 1.2 }}
+                            transition={{ duration: 0.5 }}
+                          >
                             {mode === 'disassemble' ? currentPhaseParts.length - index : index + 1}
-                          </span>
-                          <div className="w-12 h-12 rounded-xl overflow-hidden relative" style={{ backgroundColor: materialColor.light }}>
+                          </motion.span>
+                          <motion.div 
+                            className="w-12 h-12 rounded-xl overflow-hidden relative" 
+                            style={{ backgroundColor: materialColor.light }}
+                            whileHover={{ rotate: [0, -5, 5, 0], scale: 1.1 }}
+                            transition={{ duration: 0.5 }}
+                          >
                             {/* Use insulation.jpeg for parts named "Insulation", otherwise use material image */}
                             {part.name.includes('Insulation') ? (
                               <img src="/insulation.jpeg" alt="Insulation" className="absolute inset-0 w-full h-full object-cover" />
                             ) : materialColor.image ? (
                               <img src={materialColor.image} alt={materialColor.name} className="absolute inset-0 w-full h-full object-cover" />
                             ) : null}
-                          </div>
+                          </motion.div>
                         </div>
                         
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-white">{part.name}</p>
+                          <motion.p 
+                            className="font-medium text-white"
+                            whileHover={{ x: 3 }}
+                          >
+                            {part.name}
+                          </motion.p>
                           <p className="text-sm text-slate-500">
                             {materialColor.name} · {part.weight}kg · Load {part.loadCapacity}kg
                           </p>
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <span className={`px-3 py-1 rounded-lg text-sm font-medium ${partStatus.bg} ${partStatus.color}`}>
+                          <motion.span 
+                            className={`px-3 py-1 rounded-lg text-sm font-medium ${partStatus.bg} ${partStatus.color}`}
+                            whileHover={{ scale: 1.1 }}
+                          >
                             {partStatus.label}
-                          </span>
+                          </motion.span>
                           
                           {canInstall && (
                             <motion.button 
                               className="btn-primary py-2 px-4 text-sm"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              animate={{ 
+                                boxShadow: [
+                                  '0 0 20px rgba(34, 197, 94, 0.3)',
+                                  '0 0 30px rgba(34, 197, 94, 0.5)',
+                                  '0 0 20px rgba(34, 197, 94, 0.3)',
+                                ]
+                              }}
+                              transition={{ duration: 2, repeat: Infinity }}
+                            >
                               whileHover={{ scale: 1.02 }}
                               whileTap={{ scale: 0.98 }}
                             >
