@@ -16,6 +16,14 @@ import {
 import type { CuttingRobot, BuildingPart, MaterialType } from '../types';
 import { MATERIAL_COLORS } from '../types';
 
+// Robot images
+const ROBOT_IMAGES = [
+  '/cutting_robot1.png',
+  '/cutting_robot2.jpeg',
+  '/cutting_robot3.jpg',
+  '/cutting_robot4.jpg',
+];
+
 const mockRobots: CuttingRobot[] = [
   { id: 'r1', name: 'Cutting Robot A-01', status: 'cutting', currentPart: 'BM-0847', progress: 67, partsCompleted: 234, totalParts: 350 },
   { id: 'r2', name: 'Cutting Robot A-02', status: 'cutting', currentPart: 'RW-1203', progress: 23, partsCompleted: 189, totalParts: 350 },
@@ -319,8 +327,9 @@ export function Factory() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {robots.map((robot) => {
+            {robots.map((robot, index) => {
               const status = statusConfig[robot.status];
+              const robotImage = ROBOT_IMAGES[index % ROBOT_IMAGES.length];
               return (
                 <motion.div
                   key={robot.id}
@@ -335,8 +344,15 @@ export function Factory() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className={`w-12 h-12 rounded-xl ${status.bg} flex items-center justify-center`}>
-                        <Bot className={`w-6 h-6 ${status.color}`} />
+                      <div className={`w-14 h-14 rounded-xl ${status.bg} flex items-center justify-center overflow-hidden relative border-2 ${status.border}`}>
+                        <img src={robotImage} alt={robot.name} className="w-full h-full object-cover" />
+                        {/* Status indicator overlay */}
+                        {robot.status === 'cutting' && (
+                          <div className="absolute inset-0 bg-primary-500/20 animate-pulse" />
+                        )}
+                        {robot.status === 'maintenance' && (
+                          <div className="absolute inset-0 bg-accent-500/30" />
+                        )}
                       </div>
                       <div>
                         <p className="font-medium text-white">{robot.name}</p>
