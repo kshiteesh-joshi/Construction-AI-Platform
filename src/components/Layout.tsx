@@ -26,11 +26,13 @@ export function Layout() {
         {/* Logo */}
         <div className="p-6 border-b border-slate-700/50">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-forest-400 to-forest-600 flex items-center justify-center shadow-lg shadow-forest-500/30">
-              <Leaf className="w-6 h-6 text-white" />
-            </div>
+            <img 
+              src="/lithos-logo.png" 
+              alt="Lithos.AI Logo" 
+              className="w-10 h-10 rounded-xl object-cover shadow-lg"
+            />
             <div>
-              <h1 className="font-display font-bold text-xl text-white">Origin</h1>
+              <h1 className="font-display font-bold text-xl text-white">Lithos.AI</h1>
               <p className="text-xs text-slate-500">Renewable Building Platform</p>
             </div>
           </div>
