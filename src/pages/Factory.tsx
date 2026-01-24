@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
   Factory as FactoryIcon,
@@ -60,6 +60,89 @@ const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
 };
+
+// Material Usage Stats Component with animated percentages
+function MaterialUsageStats() {
+  const materials = Object.entries(MATERIAL_COLORS).slice(0, 6);
+  const [percentages, setPercentages] = useState<Record<string, number>>(() => {
+    const initial: Record<string, number> = {};
+    materials.forEach(([key]) => {
+      initial[key] = Math.random() * 20 + 30; // Start between 30-50%
+    });
+    return initial;
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPercentages((prev) => {
+        const updated: Record<string, number> = {};
+        materials.forEach(([key]) => {
+          const current = prev[key] || 30;
+          // Only increase, max 98%
+          const increment = Math.random() * 0.5 + 0.1;
+          updated[key] = Math.min(current + increment, 98);
+        });
+        return updated;
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <motion.div variants={itemVariants} className="glass-panel p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-display font-semibold text-white flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-primary-400" />
+          Material Usage Statistics
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        {materials.map(([key, value]) => {
+          const percentage = percentages[key] || 50;
+          return (
+            <motion.div 
+              key={key} 
+              className="text-center"
+              whileHover={{ scale: 1.05 }}
+            >
+              <div className="w-full aspect-square rounded-xl mb-3 flex items-center justify-center relative overflow-hidden border border-slate-700/50">
+                {/* Material image background */}
+                {value.image && (
+                  <img 
+                    src={value.image} 
+                    alt={value.name} 
+                    className="absolute inset-0 w-full h-full object-cover opacity-30"
+                  />
+                )}
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-slate-900/40" />
+                {/* Animated fill */}
+                <motion.div
+                  className="absolute bottom-0 left-0 right-0"
+                  initial={{ height: '0%' }}
+                  animate={{ height: `${percentage}%` }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  style={{ backgroundColor: value.light }}
+                >
+                  {/* Shimmer effect */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent animate-pulse" />
+                </motion.div>
+                {/* Percentage text */}
+                <span className="relative z-10 text-2xl font-display font-bold text-white drop-shadow-lg">
+                  {percentage.toFixed(0)}%
+                </span>
+              </div>
+              <p className="text-sm text-white font-medium">{value.name}</p>
+              <p className="text-xs text-slate-500">Used</p>
+            </motion.div>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
+}
 
 export function Factory() {
   const [robots, setRobots] = useState(mockRobots);
@@ -337,46 +420,7 @@ export function Factory() {
       </div>
 
       {/* Production analytics */}
-      <motion.div variants={itemVariants} className="glass-panel p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-display font-semibold text-white flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-primary-400" />
-            Material Usage Statistics
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {Object.entries(MATERIAL_COLORS).slice(0, 6).map(([key, value]) => {
-            const percentage = Math.random() * 30 + 50;
-            return (
-              <motion.div 
-                key={key} 
-                className="text-center"
-                whileHover={{ scale: 1.05 }}
-              >
-                <div
-                  className="w-full aspect-square rounded-xl mb-3 flex items-center justify-center relative overflow-hidden border border-slate-700/50"
-                  style={{ backgroundColor: `${value.light}15` }}
-                >
-                  <div
-                    className="absolute bottom-0 left-0 right-0 transition-all duration-500"
-                    style={{
-                      height: `${percentage}%`,
-                      backgroundColor: value.light,
-                      opacity: 0.4,
-                    }}
-                  />
-                  <span className="relative text-2xl font-display font-bold text-white">
-                    {percentage.toFixed(0)}%
-                  </span>
-                </div>
-                <p className="text-sm text-white font-medium">{value.name}</p>
-                <p className="text-xs text-slate-500">Used</p>
-              </motion.div>
-            );
-          })}
-        </div>
-      </motion.div>
+      <MaterialUsageStats />
     </motion.div>
   );
 }
