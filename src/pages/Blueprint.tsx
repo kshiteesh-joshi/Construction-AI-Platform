@@ -175,10 +175,10 @@ export function Blueprint() {
           <img 
             src="/blueprint.jpg" 
             alt="Blueprint" 
-            className="w-full h-full object-cover opacity-30"
+            className="w-full h-full object-cover opacity-60"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/98 via-slate-900/90 to-slate-900/80" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-900/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/80" />
         </div>
         
         {/* Content */}
@@ -190,7 +190,7 @@ export function Blueprint() {
                 <span className="text-sm font-medium text-primary-400">AI-Powered</span>
               </div>
               <h1 className="text-3xl font-display font-bold text-white mb-2">Blueprint Generator</h1>
-              <p className="text-slate-400 max-w-lg">Upload scene and blueprint to generate modular assembly drawings with AI analysis</p>
+              <p className="text-slate-300 max-w-xl">Upload scene and blueprint to generate modular assembly drawings, <span className="text-primary-400 font-medium">safety compliance audit reports</span>, and <span className="text-accent-400 font-medium">material requirement analysis</span></p>
             </div>
             {step === 'result' && (
               <motion.button 
