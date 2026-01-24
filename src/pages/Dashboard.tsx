@@ -122,8 +122,8 @@ const itemVariants = {
     y: 0,
     transition: {
       type: "spring",
-      stiffness: 100,
-      damping: 12
+      stiffness: 260,
+      damping: 20
     }
   },
 };
@@ -156,22 +156,52 @@ export function Dashboard() {
       <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
           <motion.div 
-            key={stat.label} 
-            className="glass-panel p-5 group hover:border-primary-500/30 transition-all duration-300"
-            whileHover={{ y: -4, scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            key={stat.label}
+            variants={itemVariants}
+            className="glass-panel p-5 group hover:border-primary-500/30 transition-all duration-300 relative overflow-hidden"
+            whileHover={{ y: -6, scale: 1.03 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            <div className="flex items-start justify-between">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-lg ${stat.glow}`}>
+            {/* Animated background gradient */}
+            <motion.div 
+              className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-5`}
+              initial={{ opacity: 0 }}
+              whileHover={{ opacity: 0.05 }}
+              transition={{ duration: 0.3 }}
+            />
+            
+            <div className="flex items-start justify-between relative z-10">
+              <motion.div 
+                className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-lg ${stat.glow}`}
+                whileHover={{ rotate: 360, scale: 1.1 }}
+                transition={{ duration: 0.6, type: "spring" }}
+              >
                 <stat.icon className="w-6 h-6 text-white" />
-              </div>
-              <div className={`flex items-center gap-1 text-sm font-semibold ${stat.trend === 'up' ? 'text-primary-400' : 'text-red-400'}`}>
+              </motion.div>
+              <motion.div 
+                className={`flex items-center gap-1 text-sm font-semibold ${stat.trend === 'up' ? 'text-primary-400' : 'text-red-400'}`}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 + 0.2 }}
+              >
                 {stat.change}
-                <TrendingUp className="w-4 h-4" />
-              </div>
+                <motion.div
+                  animate={{ y: [0, -2, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0.5 }}
+                >
+                  <TrendingUp className="w-4 h-4" />
+                </motion.div>
+              </motion.div>
             </div>
-            <div className="mt-4">
-              <p className="text-3xl font-display font-bold text-white">{stat.value}</p>
+            <div className="mt-4 relative z-10">
+              <motion.p 
+                className="text-3xl font-display font-bold text-white"
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: index * 0.1 + 0.3, type: "spring", stiffness: 200 }}
+              >
+                {stat.value}
+              </motion.p>
               <p className="text-sm text-slate-500 mt-1">{stat.label}</p>
             </div>
           </motion.div>
@@ -199,19 +229,31 @@ export function Dashboard() {
               return (
                 <motion.div
                   key={project.id}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`relative rounded-xl border border-slate-700/30 hover:border-primary-500/30 transition-all duration-300 cursor-pointer group overflow-hidden`}
-                  whileHover={{ scale: 1.01 }}
+                  transition={{ 
+                    delay: index * 0.15, 
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 20
+                  }}
+                  className={`relative rounded-xl border border-slate-700/30 hover:border-primary-500/40 transition-all duration-500 cursor-pointer group overflow-hidden`}
+                  whileHover={{ 
+                    scale: 1.02,
+                    y: -4,
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.3), 0 0 40px rgba(34,197,94,0.1)"
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
                   {/* Background Image */}
                   {projectImage && (
                     <div className="absolute inset-0">
-                      <img
+                      <motion.img
                         src={projectImage}
                         alt={project.name}
-                        className="w-full h-full object-cover opacity-70 group-hover:opacity-80 transition-opacity duration-300"
+                        className="w-full h-full object-cover opacity-70"
+                        whileHover={{ scale: 1.05, opacity: 0.85 }}
+                        transition={{ duration: 0.6 }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-r from-slate-900/60 via-slate-900/50 to-slate-900/40" />
                     </div>
@@ -220,18 +262,31 @@ export function Dashboard() {
                   {/* Content */}
                   <div className="relative p-5">
                     {/* Hover glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <motion.div 
+                      className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-accent-500/10"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
                     
                     <div className="flex items-start justify-between mb-4 relative">
                       <div>
-                        <h3 className="font-semibold text-white group-hover:text-primary-400 transition-colors text-lg">
+                        <motion.h3 
+                          className="font-semibold text-white group-hover:text-primary-300 transition-colors text-lg"
+                          whileHover={{ x: 5 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
                           {project.name}
-                        </h3>
+                        </motion.h3>
                         <p className="text-sm text-slate-400 mt-1">{project.description}</p>
                       </div>
-                      <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${status.bg} ${status.text} border ${status.border} shadow-lg ${status.glow}`}>
+                      <motion.span 
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold ${status.bg} ${status.text} border ${status.border} shadow-lg ${status.glow}`}
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ type: "spring", stiffness: 400 }}
+                      >
                         {status.label}
-                      </span>
+                      </motion.span>
                     </div>
                     
                     <div className="flex items-center gap-6 relative">
@@ -242,11 +297,21 @@ export function Dashboard() {
                         </div>
                         <div className="progress-bar">
                           <motion.div
-                            className="progress-bar-fill"
-                            initial={{ width: 0 }}
-                            animate={{ width: `${project.progress}%` }}
-                            transition={{ duration: 1, delay: index * 0.1 }}
-                          />
+                            className="progress-bar-fill relative overflow-hidden"
+                            initial={{ width: 0, opacity: 0 }}
+                            animate={{ width: `${project.progress}%`, opacity: 1 }}
+                            transition={{ 
+                              width: { duration: 1.5, delay: index * 0.15, ease: "easeOut" },
+                              opacity: { duration: 0.3, delay: index * 0.15 }
+                            }}
+                          >
+                            {/* Animated shimmer effect */}
+                            <motion.div
+                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                              animate={{ x: ['-100%', '200%'] }}
+                              transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                            />
+                          </motion.div>
                         </div>
                       </div>
                       <div className="text-right">
@@ -285,16 +350,34 @@ export function Dashboard() {
                   animate={{ 
                     boxShadow: [
                       '0 0 20px rgba(34, 197, 94, 0.3)',
-                      '0 0 40px rgba(34, 197, 94, 0.5)',
+                      '0 0 50px rgba(34, 197, 94, 0.6)',
                       '0 0 20px rgba(34, 197, 94, 0.3)',
-                    ]
+                    ],
+                    scale: [1, 1.05, 1]
                   }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  whileHover={{ 
+                    scale: 1.1, 
+                    rotate: 360,
+                    transition: { duration: 0.8, type: "spring" }
+                  }}
                 >
                   <div className="absolute inset-2 rounded-full bg-gradient-to-br from-primary-500/10 to-transparent" />
-                  <Leaf className="w-14 h-14 text-primary-400 relative z-10" />
+                  <motion.div
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Leaf className="w-14 h-14 text-primary-400 relative z-10" />
+                  </motion.div>
                 </motion.div>
-                <p className="text-4xl font-display font-bold text-gradient-primary">-67%</p>
+                <motion.p 
+                  className="text-4xl font-display font-bold text-gradient-primary"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+                >
+                  -67%
+                </motion.p>
                 <p className="text-sm text-slate-500 mt-1">Carbon Footprint Reduction</p>
               </div>
               
@@ -307,18 +390,29 @@ export function Dashboard() {
                   <motion.div 
                     key={item.label}
                     className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/30 hover:border-primary-500/30 transition-all duration-300"
-                    initial={{ opacity: 0, x: 20 }}
+                    initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 + index * 0.1 }}
-                    whileHover={{ scale: 1.02 }}
+                    transition={{ delay: 0.7 + index * 0.15, type: "spring", stiffness: 200 }}
+                    whileHover={{ scale: 1.03, x: 5 }}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl bg-${item.color}-500/20 flex items-center justify-center ring-1 ring-${item.color}-500/30`}>
+                      <motion.div 
+                        className={`w-10 h-10 rounded-xl bg-${item.color}-500/20 flex items-center justify-center ring-1 ring-${item.color}-500/30`}
+                        whileHover={{ rotate: 360, scale: 1.2 }}
+                        transition={{ duration: 0.6 }}
+                      >
                         <item.icon className={`w-5 h-5 text-${item.color}-400`} />
-                      </div>
+                      </motion.div>
                       <span className="text-sm text-slate-300 font-medium">{item.label}</span>
                     </div>
-                    <span className="text-lg font-bold text-white">{item.value}</span>
+                    <motion.span 
+                      className="text-lg font-bold text-white"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.9 + index * 0.15, type: "spring", stiffness: 300 }}
+                    >
+                      {item.value}
+                    </motion.span>
                   </motion.div>
                 ))}
               </div>
