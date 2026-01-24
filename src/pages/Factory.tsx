@@ -445,7 +445,6 @@ export function Factory() {
                     <video
                       key={selectedRobot}
                       className="w-full h-full object-contain"
-                      controls
                       autoPlay
                       loop
                       muted
