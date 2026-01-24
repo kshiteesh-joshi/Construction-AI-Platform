@@ -440,9 +440,12 @@ export function Construction() {
                             {mode === 'disassemble' ? currentPhaseParts.length - index : index + 1}
                           </span>
                           <div className="w-12 h-12 rounded-xl overflow-hidden relative" style={{ backgroundColor: materialColor.light }}>
-                            {materialColor.image && (
+                            {/* Use insulation.jpeg for parts named "Insulation", otherwise use material image */}
+                            {part.name.includes('Insulation') ? (
+                              <img src="/insulation.jpeg" alt="Insulation" className="absolute inset-0 w-full h-full object-cover" />
+                            ) : materialColor.image ? (
                               <img src={materialColor.image} alt={materialColor.name} className="absolute inset-0 w-full h-full object-cover" />
-                            )}
+                            ) : null}
                           </div>
                         </div>
                         
