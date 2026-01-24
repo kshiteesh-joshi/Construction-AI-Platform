@@ -513,9 +513,6 @@ export function Construction() {
                               }}
                               transition={{ duration: 2, repeat: Infinity }}
                             >
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                            >
                               {mode === 'build' ? 'Install' : 'Remove'}
                             </motion.button>
                           )}
