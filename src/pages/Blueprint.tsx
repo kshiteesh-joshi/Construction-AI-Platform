@@ -712,13 +712,18 @@ export function Blueprint() {
                   Compliance Audit Report
                 </h3>
                 <div className="flex items-center gap-3">
-                  <span className="status-badge-success">
-                    <CheckCircle2 className="w-4 h-4" />
-                    Compliant
-                  </span>
                   <motion.button 
                     className="btn-secondary text-sm py-2 px-4 flex items-center gap-2"
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = '/audit.png';
+                      link.download = 'Lithos_AI_Compliance_Audit_Report.png';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }}
                     whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     <Download className="w-4 h-4" />
                     Download Report
