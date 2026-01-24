@@ -247,9 +247,9 @@ export function Dashboard() {
             <img 
               src="/bamboo.webp" 
               alt="Green Bamboo" 
-              className="w-full h-full object-cover opacity-40"
+              className="w-full h-full object-cover opacity-70"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/70 to-slate-900/85" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/50 to-slate-900/70" />
           </div>
           
           <div className="relative glass-panel p-6 bg-transparent border-slate-700/30">

@@ -206,8 +206,8 @@ export function Factory() {
             alt="Factory" 
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/60" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-900/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
         </div>
         
         {/* Content */}
