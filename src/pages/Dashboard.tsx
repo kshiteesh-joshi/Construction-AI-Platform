@@ -211,9 +211,9 @@ export function Dashboard() {
                       <img
                         src={projectImage}
                         alt={project.name}
-                        className="w-full h-full object-cover opacity-40 group-hover:opacity-50 transition-opacity duration-300"
+                        className="w-full h-full object-cover opacity-70 group-hover:opacity-80 transition-opacity duration-300"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/70" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-slate-900/60 via-slate-900/50 to-slate-900/40" />
                     </div>
                   )}
                   
