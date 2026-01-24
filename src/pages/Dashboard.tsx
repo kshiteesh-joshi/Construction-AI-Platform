@@ -13,6 +13,13 @@ import {
 } from 'lucide-react';
 import type { Project } from '../types';
 
+// Project images mapping
+const PROJECT_IMAGES: Record<string, string> = {
+  'Eco Community Center': '/Eco_Community_Center.jpg',
+  'Sustainable Residence Block A': '/Sustainable_ResidenceBlockA.jpg',
+  'Green Office Building': '/green_officebuilding.jpg',
+};
+
 const mockProjects: Project[] = [
   {
     id: '1',
@@ -188,50 +195,66 @@ export function Dashboard() {
           <div className="space-y-4">
             {mockProjects.map((project, index) => {
               const status = statusColors[project.status];
+              const projectImage = PROJECT_IMAGES[project.name];
               return (
                 <motion.div
                   key={project.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className={`p-5 rounded-xl bg-gradient-to-r from-slate-800/60 to-slate-800/30 border border-slate-700/30 hover:border-primary-500/30 transition-all duration-300 cursor-pointer group relative overflow-hidden`}
+                  className={`relative rounded-xl border border-slate-700/30 hover:border-primary-500/30 transition-all duration-300 cursor-pointer group overflow-hidden`}
                   whileHover={{ scale: 1.01 }}
                 >
-                  {/* Hover glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  <div className="flex items-start justify-between mb-4 relative">
-                    <div>
-                      <h3 className="font-semibold text-white group-hover:text-primary-400 transition-colors text-lg">
-                        {project.name}
-                      </h3>
-                      <p className="text-sm text-slate-500 mt-1">{project.description}</p>
+                  {/* Background Image */}
+                  {projectImage && (
+                    <div className="absolute inset-0">
+                      <img
+                        src={projectImage}
+                        alt={project.name}
+                        className="w-full h-full object-cover opacity-40 group-hover:opacity-50 transition-opacity duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/70" />
                     </div>
-                    <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${status.bg} ${status.text} border ${status.border} shadow-lg ${status.glow}`}>
-                      {status.label}
-                    </span>
-                  </div>
+                  )}
                   
-                  <div className="flex items-center gap-6 relative">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between text-sm mb-2">
-                        <span className="text-slate-400">Progress</span>
-                        <span className="text-white font-semibold">{project.progress}%</span>
+                  {/* Content */}
+                  <div className="relative p-5">
+                    {/* Hover glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    
+                    <div className="flex items-start justify-between mb-4 relative">
+                      <div>
+                        <h3 className="font-semibold text-white group-hover:text-primary-400 transition-colors text-lg">
+                          {project.name}
+                        </h3>
+                        <p className="text-sm text-slate-400 mt-1">{project.description}</p>
                       </div>
-                      <div className="progress-bar">
-                        <motion.div
-                          className="progress-bar-fill"
-                          initial={{ width: 0 }}
-                          animate={{ width: `${project.progress}%` }}
-                          transition={{ duration: 1, delay: index * 0.1 }}
-                        />
-                      </div>
+                      <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${status.bg} ${status.text} border ${status.border} shadow-lg ${status.glow}`}>
+                        {status.label}
+                      </span>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm text-slate-400">Parts</p>
-                      <p className="text-white font-semibold">
-                        <span className="text-primary-400">{project.completedParts}</span>/{project.totalParts}
-                      </p>
+                    
+                    <div className="flex items-center gap-6 relative">
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between text-sm mb-2">
+                          <span className="text-slate-400">Progress</span>
+                          <span className="text-white font-semibold">{project.progress}%</span>
+                        </div>
+                        <div className="progress-bar">
+                          <motion.div
+                            className="progress-bar-fill"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${project.progress}%` }}
+                            transition={{ duration: 1, delay: index * 0.1 }}
+                          />
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-slate-400">Parts</p>
+                        <p className="text-white font-semibold">
+                          <span className="text-primary-400">{project.completedParts}</span>/{project.totalParts}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
