@@ -78,13 +78,18 @@ function MaterialUsageStats() {
         const updated: Record<string, number> = {};
         materials.forEach(([key]) => {
           const current = prev[key] || 30;
-          // Only increase, max 98%
-          const increment = Math.random() * 0.5 + 0.1;
-          updated[key] = Math.min(current + increment, 98);
+          // Reset to random start value when reaching 98%
+          if (current >= 98) {
+            updated[key] = Math.random() * 20 + 20; // Reset to 20-40%
+          } else {
+            // Slower increase: 0.05-0.2% per tick
+            const increment = Math.random() * 0.15 + 0.05;
+            updated[key] = Math.min(current + increment, 98);
+          }
         });
         return updated;
       });
-    }, 100);
+    }, 200); // Slower interval: 200ms instead of 100ms
 
     return () => clearInterval(interval);
   }, []);
