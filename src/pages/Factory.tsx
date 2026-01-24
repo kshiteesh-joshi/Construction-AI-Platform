@@ -77,21 +77,13 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.08 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 260,
-      damping: 20
-    }
-  },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
 };
 
 // Material Usage Stats Component with animated percentages
@@ -341,78 +333,41 @@ export function Factory() {
               return (
                 <motion.div
                   key={robot.id}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1, type: "spring", stiffness: 200 }}
-                  className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer relative overflow-hidden ${
+                  className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer ${
                     selectedRobot === robot.id
-                      ? 'bg-slate-700/50 border-primary-500/50 shadow-lg shadow-primary-500/20'
+                      ? 'bg-slate-700/50 border-primary-500/50'
                       : 'bg-slate-800/40 border-slate-700/30 hover:border-primary-500/30'
                   }`}
                   onClick={() => setSelectedRobot(robot.id === selectedRobot ? null : robot.id)}
-                  whileHover={{ scale: 1.03, y: -4 }}
+                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {/* Animated background glow */}
-                  {selectedRobot === robot.id && (
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-transparent"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  )}
-                  
-                  <div className="flex items-start justify-between mb-3 relative z-10">
+                  <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <motion.div 
-                        className={`w-14 h-14 rounded-xl ${status.bg} flex items-center justify-center overflow-hidden relative border-2 ${status.border}`}
-                        whileHover={{ rotate: [0, -5, 5, -5, 0], scale: 1.1 }}
-                        transition={{ duration: 0.5 }}
-                      >
+                      <div className={`w-14 h-14 rounded-xl ${status.bg} flex items-center justify-center overflow-hidden relative border-2 ${status.border}`}>
                         <img src={robotImage} alt={robot.name} className="w-full h-full object-cover" />
                         {/* Status indicator overlay */}
                         {robot.status === 'cutting' && (
-                          <motion.div 
-                            className="absolute inset-0 bg-primary-500/20"
-                            animate={{ opacity: [0.2, 0.5, 0.2] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                          />
+                          <div className="absolute inset-0 bg-primary-500/20 animate-pulse" />
                         )}
                         {robot.status === 'maintenance' && (
                           <div className="absolute inset-0 bg-accent-500/30" />
                         )}
-                      </motion.div>
+                      </div>
                       <div>
-                        <motion.p 
-                          className="font-medium text-white"
-                          whileHover={{ x: 3 }}
-                        >
-                          {robot.name}
-                        </motion.p>
-                        <motion.span 
-                          className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.color} border ${status.border}`}
-                          whileHover={{ scale: 1.05 }}
-                        >
+                        <p className="font-medium text-white">{robot.name}</p>
+                        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.color} border ${status.border}`}>
                           {robot.status === 'cutting' && (
-                            <motion.span 
-                              className="w-1.5 h-1.5 rounded-full bg-primary-400"
-                              animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-                              transition={{ duration: 1.5, repeat: Infinity }}
-                            />
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-pulse" />
                           )}
                           {status.label}
-                        </motion.span>
+                        </span>
                       </div>
                     </div>
                     {robot.status === 'cutting' && (
-                      <motion.button 
-                        className="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-700 transition-colors"
-                        whileHover={{ scale: 1.1, rotate: 90 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
+                      <button className="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-700 transition-colors">
                         <Pause className="w-4 h-4 text-slate-400" />
-                      </motion.button>
+                      </button>
                     )}
                     {robot.status === 'idle' && (
                       <button className="p-2 rounded-lg bg-primary-500/20 hover:bg-primary-500/30 transition-colors">
@@ -461,29 +416,20 @@ export function Factory() {
             </div>
           </div>
 
-          <div className="space-y-2 max-h-[500px] overflow-y-auto custom-scrollbar">
-            {mockParts.map((part, index) => {
+          <div className="space-y-2 max-h-[500px] overflow-y-auto">
+            {mockParts.map((part) => {
               const materialColor = MATERIAL_COLORS[part.material as MaterialType];
               const partStatus = partStatusConfig[part.status];
               
               return (
                 <motion.div
                   key={part.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05, type: "spring", stiffness: 200 }}
-                  className="p-3 rounded-xl bg-slate-800/40 border border-slate-700/30 hover:border-primary-500/40 transition-all duration-300 relative overflow-hidden group"
+                  className="p-3 rounded-xl bg-slate-800/40 border border-slate-700/30 hover:border-slate-600/50 transition-all duration-200"
                   whileHover={{ scale: 1.01 }}
-                  style={{ pointerEvents: 'auto' }}
                 >
-                  {/* Hover glow */}
-                  <div
-                    className="absolute inset-0 bg-gradient-to-r from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  />
-                  
-                  <div className="flex items-center gap-3 relative z-10">
+                  <div className="flex items-center gap-3">
                     <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden relative transition-transform duration-300 hover:rotate-12 hover:scale-110"
+                      className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden relative"
                       style={{ backgroundColor: materialColor.light }}
                     >
                       {getPartImage(part.name) ? (
@@ -495,26 +441,16 @@ export function Factory() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <p 
-                          className="font-medium text-white text-sm truncate transition-transform duration-200 group-hover:translate-x-1"
-                        >
-                          {part.name}
-                        </p>
+                        <p className="font-medium text-white text-sm truncate">{part.name}</p>
                         {part.tag && (
-                          <span 
-                            className="px-1.5 py-0.5 rounded bg-slate-700 text-xs text-slate-400 font-mono transition-transform duration-200 hover:scale-110"
-                          >
-                            {part.tag}
-                          </span>
+                          <span className="px-1.5 py-0.5 rounded bg-slate-700 text-xs text-slate-400 font-mono">{part.tag}</span>
                         )}
                       </div>
                       <p className="text-xs text-slate-500">
                         {materialColor.name} · {part.dimensions.width}×{part.dimensions.height}×{part.dimensions.depth}mm
                       </p>
                     </div>
-                    <span 
-                      className={`px-2 py-1 rounded-lg text-xs font-medium ${partStatus.bg} ${partStatus.color} transition-transform duration-200 hover:scale-110`}
-                    >
+                    <span className={`px-2 py-1 rounded-lg text-xs font-medium ${partStatus.bg} ${partStatus.color}`}>
                       {partStatus.label}
                     </span>
                   </div>
