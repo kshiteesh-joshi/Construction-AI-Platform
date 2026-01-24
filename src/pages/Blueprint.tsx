@@ -18,10 +18,15 @@ import {
 } from 'lucide-react';
 import { MATERIAL_COLORS, type MaterialType, type MaterialRequirement, type ComplianceCheck } from '../types';
 
-const mockMaterialRequirements: MaterialRequirement[] = [
+// Based on 45' × 36' (150m²) 2-story residential blueprint
+interface ExtendedMaterialRequirement extends MaterialRequirement {
+  application?: string;
+}
+
+const mockMaterialRequirements: ExtendedMaterialRequirement[] = [
   { 
     material: 'bamboo', 
-    quantity: 1250, 
+    quantity: 485,
     unit: 'm²', 
     loadRequirement: 500,
     density: 700,
@@ -29,12 +34,13 @@ const mockMaterialRequirements: MaterialRequirement[] = [
     recyclability: 95,
     durability: 25,
     supplier: 'GreenBamboo Co.',
-    estimatedCost: 45000,
-    deliveryTime: 14
+    estimatedCost: 29100,
+    deliveryTime: 14,
+    application: 'Floor joists, roof rafters, structural beams'
   },
   { 
     material: 'recycled-wood', 
-    quantity: 840, 
+    quantity: 320,
     unit: 'm²', 
     loadRequirement: 750,
     density: 650,
@@ -42,12 +48,13 @@ const mockMaterialRequirements: MaterialRequirement[] = [
     recyclability: 100,
     durability: 30,
     supplier: 'EcoWood Industries',
-    estimatedCost: 38000,
-    deliveryTime: 10
+    estimatedCost: 25600,
+    deliveryTime: 10,
+    application: 'Wall studs, interior framing, partitions'
   },
   { 
     material: 'hemp-concrete', 
-    quantity: 320, 
+    quantity: 145,
     unit: 'm³', 
     loadRequirement: 300,
     density: 400,
@@ -55,12 +62,13 @@ const mockMaterialRequirements: MaterialRequirement[] = [
     recyclability: 85,
     durability: 50,
     supplier: 'HempBuild Ltd.',
-    estimatedCost: 52000,
-    deliveryTime: 21
+    estimatedCost: 36250,
+    deliveryTime: 21,
+    application: 'External wall infill, thermal mass'
   },
   { 
     material: 'mycelium', 
-    quantity: 180, 
+    quantity: 420,
     unit: 'm²', 
     loadRequirement: 50,
     density: 180,
@@ -68,12 +76,13 @@ const mockMaterialRequirements: MaterialRequirement[] = [
     recyclability: 100,
     durability: 15,
     supplier: 'MycoMaterials',
-    estimatedCost: 12000,
-    deliveryTime: 7
+    estimatedCost: 16800,
+    deliveryTime: 7,
+    application: 'Acoustic panels, thermal insulation'
   },
   { 
     material: 'recycled-steel', 
-    quantity: 45, 
+    quantity: 12.5,
     unit: 'tons', 
     loadRequirement: 2000,
     density: 7850,
@@ -81,12 +90,13 @@ const mockMaterialRequirements: MaterialRequirement[] = [
     recyclability: 100,
     durability: 100,
     supplier: 'SteelCycle Corp.',
-    estimatedCost: 95000,
-    deliveryTime: 18
+    estimatedCost: 37500,
+    deliveryTime: 18,
+    application: 'Load-bearing columns, beams, connectors'
   },
   { 
     material: 'cork', 
-    quantity: 560, 
+    quantity: 300,
     unit: 'm²', 
     loadRequirement: 100,
     density: 240,
@@ -94,8 +104,9 @@ const mockMaterialRequirements: MaterialRequirement[] = [
     recyclability: 90,
     durability: 40,
     supplier: 'CorkNature Inc.',
-    estimatedCost: 28000,
-    deliveryTime: 12
+    estimatedCost: 18000,
+    deliveryTime: 12,
+    application: 'Flooring for all rooms (2 floors)'
   },
 ];
 
@@ -494,6 +505,44 @@ export function Blueprint() {
             exit={{ opacity: 0, y: -20 }}
             className="space-y-6"
           >
+            {/* Blueprint Specifications */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="glass-panel p-6"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary-500/20 flex items-center justify-center ring-2 ring-primary-500/30">
+                  <Layers className="w-6 h-6 text-primary-400" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-white mb-2">Building Specifications</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <p className="text-slate-500">Footprint</p>
+                      <p className="text-white font-semibold">45' × 36' (150m²)</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-500">Stories</p>
+                      <p className="text-white font-semibold">2 Floors</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-500">Total Area</p>
+                      <p className="text-white font-semibold">300 m²</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-500">Building Type</p>
+                      <p className="text-white font-semibold">Residential</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-slate-700/30 text-xs text-slate-400">
+                    Includes: Garage (24'×24'), Living Room (16'×16'), Kitchen (12'×18'), Dining (12'×12'), Family Room (16'×16'), Study (12'×12')
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* 3D Lego visualization */}
               <div className="glass-panel p-6">
@@ -623,6 +672,14 @@ export function Blueprint() {
                           </div>
                         </div>
 
+                        {/* Application */}
+                        {req.application && (
+                          <div className="mt-3 pt-3 border-t border-slate-700/30">
+                            <p className="text-xs text-slate-500 mb-1">Application</p>
+                            <p className="text-sm text-slate-300">{req.application}</p>
+                          </div>
+                        )}
+
                         {/* Cost */}
                         {req.estimatedCost && (
                           <div className="mt-3 pt-3 border-t border-slate-700/30 flex items-center justify-between">
@@ -640,7 +697,7 @@ export function Blueprint() {
                     <Scale className="w-5 h-5" />
                     <span className="font-medium">Total Parts</span>
                   </div>
-                  <p className="text-3xl font-display font-bold text-white">2,847 pieces</p>
+                  <p className="text-3xl font-display font-bold text-white">2,564 pieces</p>
                 </div>
               </div>
             </div>
