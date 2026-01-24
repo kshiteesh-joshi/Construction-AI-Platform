@@ -214,6 +214,7 @@ export function Blueprint() {
   const [step, setStep] = useState<Step>('upload');
   const [uploadedFiles, setUploadedFiles] = useState<{ scene?: File; blueprint?: File }>({});
   const [isDragging, setIsDragging] = useState(false);
+  const [showAuditPreview, setShowAuditPreview] = useState(false);
 
   const handleDrop = (e: React.DragEvent, type: 'scene' | 'blueprint') => {
     e.preventDefault();
@@ -714,19 +715,12 @@ export function Blueprint() {
                 <div className="flex items-center gap-3">
                   <motion.button 
                     className="btn-secondary text-sm py-2 px-4 flex items-center gap-2"
-                    onClick={() => {
-                      const link = document.createElement('a');
-                      link.href = '/audit.png';
-                      link.download = 'Lithos_AI_Compliance_Audit_Report.png';
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                    }}
+                    onClick={() => setShowAuditPreview(true)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <Download className="w-4 h-4" />
-                    Download Report
+                    <Eye className="w-4 h-4" />
+                    Preview
                   </motion.button>
                 </div>
               </div>
@@ -783,6 +777,73 @@ export function Blueprint() {
                 Send to Factory
               </motion.button>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Audit Report Preview Modal */}
+      <AnimatePresence>
+        {showAuditPreview && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setShowAuditPreview(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="relative max-w-6xl w-full max-h-[90vh] bg-slate-900 rounded-2xl overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-6 bg-gradient-to-b from-slate-900 to-transparent">
+                <h3 className="text-xl font-semibold text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-6 h-6 text-primary-400" />
+                  Compliance Audit Report
+                </h3>
+                <div className="flex items-center gap-2">
+                  <motion.button
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = '/audit.png';
+                      link.download = 'Lithos_AI_Compliance_Audit_Report.png';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }}
+                    className="p-2 rounded-lg bg-slate-800/70 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    title="Download Report"
+                  >
+                    <Download className="w-5 h-5" />
+                  </motion.button>
+                  <motion.button
+                    onClick={() => setShowAuditPreview(false)}
+                    className="p-2 rounded-lg bg-slate-800/70 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </motion.button>
+                </div>
+              </div>
+
+              {/* Image */}
+              <div className="w-full h-full overflow-auto">
+                <img
+                  src="/audit.png"
+                  alt="Compliance Audit Report"
+                  className="w-full h-auto"
+                />
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
