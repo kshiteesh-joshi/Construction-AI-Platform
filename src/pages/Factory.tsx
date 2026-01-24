@@ -23,6 +23,23 @@ const mockRobots: CuttingRobot[] = [
   { id: 'r4', name: 'Cutting Robot B-02', status: 'maintenance', progress: 0, partsCompleted: 312, totalParts: 350 },
 ];
 
+// Part images mapping
+const PART_IMAGES: Record<string, string> = {
+  'Load Beam': '/loadbeam.webp',
+  'Wall Panel': '/wall_panel.jpeg',
+  'Insulation': '/insulation.jpeg',
+  'Decor Panel': '/dector_panel.jpg',
+  'Connector': '/recycle_steel.jpg',
+  'Floor Tile': '/floor_tile.jpg',
+};
+
+const getPartImage = (partName: string): string | undefined => {
+  for (const [key, image] of Object.entries(PART_IMAGES)) {
+    if (partName.includes(key)) return image;
+  }
+  return undefined;
+};
+
 const mockParts: BuildingPart[] = [
   { id: 'BM-0847', name: 'Load Beam #847', material: 'bamboo', dimensions: { width: 200, height: 30, depth: 15 }, weight: 12.5, loadCapacity: 500, position: { x: 0, y: 0, z: 0 }, sequence: 847, status: 'cutting', tag: 'A-847' },
   { id: 'RW-1203', name: 'Wall Panel #1203', material: 'recycled-wood', dimensions: { width: 120, height: 240, depth: 5 }, weight: 8.2, loadCapacity: 200, position: { x: 0, y: 0, z: 0 }, sequence: 1203, status: 'cutting', tag: 'W-1203' },
@@ -399,10 +416,12 @@ export function Factory() {
                       className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden relative"
                       style={{ backgroundColor: materialColor.light }}
                     >
-                      {materialColor.image && (
+                      {getPartImage(part.name) ? (
+                        <img src={getPartImage(part.name)} alt={part.name} className="absolute inset-0 w-full h-full object-cover" />
+                      ) : materialColor.image && (
                         <img src={materialColor.image} alt={materialColor.name} className="absolute inset-0 w-full h-full object-cover opacity-80" />
                       )}
-                      <span className="text-xs font-bold text-white relative z-10 drop-shadow-md">{part.sequence}</span>
+                      <span className="text-xs font-bold text-white relative z-10 drop-shadow-lg bg-black/30 px-1 rounded">{part.sequence}</span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
