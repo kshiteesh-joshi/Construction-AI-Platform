@@ -132,9 +132,7 @@ export function Dashboard() {
       {/* Page header */}
       <motion.div variants={itemVariants} className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-display font-bold text-white">
-            Welcome back <span className="text-gradient-primary">👋</span>
-          </h1>
+          <h1 className="text-3xl font-display font-bold text-white">Dashboard</h1>
           <p className="text-slate-500 mt-1">Monitor your renewable building projects</p>
         </div>
         <motion.button 
@@ -242,53 +240,65 @@ export function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Environmental impact */}
-        <motion.div variants={itemVariants} className="glass-panel p-6">
-          <h2 className="text-xl font-display font-semibold text-white mb-6">Environmental Impact</h2>
+        {/* Environmental impact with wood texture */}
+        <motion.div variants={itemVariants} className="relative rounded-2xl overflow-hidden">
+          {/* Wood Background */}
+          <div className="absolute inset-0">
+            <img 
+              src="/wood.jpg" 
+              alt="Wood texture" 
+              className="w-full h-full object-cover opacity-20"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/90 to-slate-900/95" />
+          </div>
           
-          <div className="space-y-6">
-            <div className="text-center py-6">
-              <motion.div 
-                className="w-28 h-28 mx-auto rounded-full bg-gradient-to-br from-primary-400/20 to-primary-600/10 border border-primary-500/30 flex items-center justify-center mb-4 relative"
-                animate={{ 
-                  boxShadow: [
-                    '0 0 20px rgba(34, 197, 94, 0.3)',
-                    '0 0 40px rgba(34, 197, 94, 0.5)',
-                    '0 0 20px rgba(34, 197, 94, 0.3)',
-                  ]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <div className="absolute inset-2 rounded-full bg-gradient-to-br from-primary-500/10 to-transparent" />
-                <Leaf className="w-14 h-14 text-primary-400 relative z-10" />
-              </motion.div>
-              <p className="text-4xl font-display font-bold text-gradient-primary">-67%</p>
-              <p className="text-sm text-slate-500 mt-1">Carbon Footprint Reduction</p>
-            </div>
+          <div className="relative glass-panel p-6 bg-transparent border-slate-700/30">
+            <h2 className="text-xl font-display font-semibold text-white mb-6">Environmental Impact</h2>
             
-            <div className="space-y-3">
-              {[
-                { icon: Recycle, label: 'Recycled Materials', value: '89%', color: 'primary' },
-                { icon: Package, label: 'Waste Recovery', value: '94%', color: 'accent' },
-                { icon: Factory, label: 'Energy Efficiency', value: 'A+', color: 'secondary' },
-              ].map((item, index) => (
+            <div className="space-y-6">
+              <div className="text-center py-6">
                 <motion.div 
-                  key={item.label}
-                  className="flex items-center justify-between p-4 rounded-xl bg-slate-800/40 border border-slate-700/30 hover:border-slate-600/50 transition-all duration-300"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
+                  className="w-28 h-28 mx-auto rounded-full bg-gradient-to-br from-primary-400/20 to-primary-600/10 border border-primary-500/30 flex items-center justify-center mb-4 relative"
+                  animate={{ 
+                    boxShadow: [
+                      '0 0 20px rgba(34, 197, 94, 0.3)',
+                      '0 0 40px rgba(34, 197, 94, 0.5)',
+                      '0 0 20px rgba(34, 197, 94, 0.3)',
+                    ]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl bg-${item.color}-500/20 flex items-center justify-center ring-1 ring-${item.color}-500/30`}>
-                      <item.icon className={`w-5 h-5 text-${item.color}-400`} />
-                    </div>
-                    <span className="text-sm text-slate-300 font-medium">{item.label}</span>
-                  </div>
-                  <span className="text-lg font-bold text-white">{item.value}</span>
+                  <div className="absolute inset-2 rounded-full bg-gradient-to-br from-primary-500/10 to-transparent" />
+                  <Leaf className="w-14 h-14 text-primary-400 relative z-10" />
                 </motion.div>
-              ))}
+                <p className="text-4xl font-display font-bold text-gradient-primary">-67%</p>
+                <p className="text-sm text-slate-500 mt-1">Carbon Footprint Reduction</p>
+              </div>
+              
+              <div className="space-y-3">
+                {[
+                  { icon: Recycle, label: 'Recycled Materials', value: '89%', color: 'primary' },
+                  { icon: Package, label: 'Waste Recovery', value: '94%', color: 'accent' },
+                  { icon: Factory, label: 'Energy Efficiency', value: 'A+', color: 'secondary' },
+                ].map((item, index) => (
+                  <motion.div 
+                    key={item.label}
+                    className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/30 hover:border-primary-500/30 transition-all duration-300"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + index * 0.1 }}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-xl bg-${item.color}-500/20 flex items-center justify-center ring-1 ring-${item.color}-500/30`}>
+                        <item.icon className={`w-5 h-5 text-${item.color}-400`} />
+                      </div>
+                      <span className="text-sm text-slate-300 font-medium">{item.label}</span>
+                    </div>
+                    <span className="text-lg font-bold text-white">{item.value}</span>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>

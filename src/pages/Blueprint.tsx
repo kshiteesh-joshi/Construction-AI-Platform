@@ -14,6 +14,7 @@ import {
   Box,
   Scale,
   Leaf,
+  Sparkles,
 } from 'lucide-react';
 import { MATERIAL_COLORS, type MaterialType, type MaterialRequirement, type ComplianceCheck } from '../types';
 
@@ -73,7 +74,6 @@ function LegoVisualization() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: block.delay, duration: 0.5, ease: 'easeOut' }}
           >
-            {/* Block body */}
             <rect
               x={block.x}
               y={block.y}
@@ -85,7 +85,6 @@ function LegoVisualization() {
               strokeWidth={1}
               filter="url(#shadow)"
             />
-            {/* Top face (3D effect) */}
             <polygon
               points={`${block.x},${block.y} ${block.x + 36},${block.y} ${block.x + 30},${block.y - 8} ${block.x - 6},${block.y - 8}`}
               fill={block.colors.light}
@@ -93,7 +92,6 @@ function LegoVisualization() {
               strokeWidth={0.5}
               opacity={0.9}
             />
-            {/* Studs */}
             {[0, 1, 2].map((i) => (
               <ellipse
                 key={i}
@@ -116,7 +114,7 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.08 },
   },
 };
 
@@ -150,7 +148,6 @@ export function Blueprint() {
 
   const handleGenerate = () => {
     setStep('processing');
-    // Simulate processing
     setTimeout(() => {
       setStep('result');
     }, 3000);
@@ -168,18 +165,46 @@ export function Blueprint() {
       animate="visible"
       className="space-y-6"
     >
-      {/* Page header */}
-      <motion.div variants={itemVariants} className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-display font-bold text-white">Blueprint Generator</h1>
-          <p className="text-slate-500 mt-1">Upload scene and blueprint to generate modular assembly drawings</p>
+      {/* Hero Section with Blueprint Background */}
+      <motion.div 
+        variants={itemVariants} 
+        className="relative rounded-2xl overflow-hidden"
+      >
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src="/blueprint-sketch.jpg" 
+            alt="Blueprint" 
+            className="w-full h-full object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/98 via-slate-900/90 to-slate-900/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900" />
         </div>
-        {step === 'result' && (
-          <button onClick={resetProcess} className="btn-secondary flex items-center gap-2">
-            <RefreshCw className="w-5 h-5" />
-            Regenerate
-          </button>
-        )}
+        
+        {/* Content */}
+        <div className="relative p-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="w-5 h-5 text-primary-400" />
+                <span className="text-sm font-medium text-primary-400">AI-Powered</span>
+              </div>
+              <h1 className="text-3xl font-display font-bold text-white mb-2">Blueprint Generator</h1>
+              <p className="text-slate-400 max-w-lg">Upload scene and blueprint to generate modular assembly drawings with AI analysis</p>
+            </div>
+            {step === 'result' && (
+              <motion.button 
+                onClick={resetProcess} 
+                className="btn-secondary flex items-center gap-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <RefreshCw className="w-5 h-5" />
+                Regenerate
+              </motion.button>
+            )}
+          </div>
+        </div>
       </motion.div>
 
       {/* Steps indicator */}
@@ -198,32 +223,23 @@ export function Blueprint() {
             return (
               <div key={s.key} className="flex items-center">
                 <div className="flex items-center gap-3">
-                  <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                  <motion.div
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
                       isActive
-                        ? 'bg-forest-500 text-white shadow-lg shadow-forest-500/30'
+                        ? 'bg-gradient-to-br from-primary-400 to-primary-600 text-white shadow-lg shadow-primary-500/30'
                         : isPast
-                        ? 'bg-forest-500/20 text-forest-400'
-                        : 'bg-slate-700/50 text-slate-500'
+                        ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30'
+                        : 'bg-slate-700/50 text-slate-500 border border-slate-600/30'
                     }`}
+                    whileHover={{ scale: 1.05 }}
                   >
-                    {isPast ? (
-                      <CheckCircle2 className="w-5 h-5" />
-                    ) : (
-                      <s.icon className="w-5 h-5" />
-                    )}
-                  </div>
-                  <span
-                    className={`font-medium ${
-                      isActive ? 'text-white' : isPast ? 'text-forest-400' : 'text-slate-500'
-                    }`}
-                  >
+                    {isPast ? <CheckCircle2 className="w-5 h-5" /> : <s.icon className="w-5 h-5" />}
+                  </motion.div>
+                  <span className={`font-medium ${isActive ? 'text-white' : isPast ? 'text-primary-400' : 'text-slate-500'}`}>
                     {s.label}
                   </span>
                 </div>
-                {index < 2 && (
-                  <ArrowRight className="w-5 h-5 text-slate-600 mx-6" />
-                )}
+                {index < 2 && <ArrowRight className="w-5 h-5 text-slate-600 mx-6" />}
               </div>
             );
           })}
@@ -242,42 +258,41 @@ export function Blueprint() {
             {/* Scene upload */}
             <div className="glass-panel p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-forest-500/20 flex items-center justify-center">
-                  <FileImage className="w-5 h-5 text-forest-400" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-400/20 to-primary-600/20 flex items-center justify-center ring-1 ring-primary-500/30">
+                  <FileImage className="w-6 h-6 text-primary-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white">Scene Image</h3>
+                  <h3 className="font-semibold text-white text-lg">Scene Image</h3>
                   <p className="text-sm text-slate-500">Upload building site photo or rendering</p>
                 </div>
               </div>
               
               <label
-                className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200 ${
+                className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${
                   isDragging
-                    ? 'border-forest-500 bg-forest-500/10'
+                    ? 'border-primary-500 bg-primary-500/10'
                     : uploadedFiles.scene
-                    ? 'border-forest-500/50 bg-forest-500/5'
-                    : 'border-slate-700/50 hover:border-slate-600'
+                    ? 'border-primary-500/50 bg-primary-500/5'
+                    : 'border-slate-700/50 hover:border-primary-500/50 hover:bg-slate-800/30'
                 }`}
                 onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={(e) => handleDrop(e, 'scene')}
               >
-                <input
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={(e) => handleFileSelect(e, 'scene')}
-                />
+                <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileSelect(e, 'scene')} />
                 {uploadedFiles.scene ? (
                   <div className="flex flex-col items-center">
-                    <CheckCircle2 className="w-12 h-12 text-forest-400 mb-3" />
+                    <div className="w-16 h-16 rounded-full bg-primary-500/20 flex items-center justify-center mb-3">
+                      <CheckCircle2 className="w-8 h-8 text-primary-400" />
+                    </div>
                     <p className="text-white font-medium">{uploadedFiles.scene.name}</p>
                     <p className="text-sm text-slate-500 mt-1">Click to reselect</p>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <Upload className="w-12 h-12 text-slate-500 mb-3" />
+                    <div className="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mb-3">
+                      <Upload className="w-8 h-8 text-slate-500" />
+                    </div>
                     <p className="text-slate-300">Drag file here or click to upload</p>
                     <p className="text-sm text-slate-500 mt-1">Supports JPG, PNG, WebP</p>
                   </div>
@@ -288,39 +303,38 @@ export function Blueprint() {
             {/* Blueprint upload */}
             <div className="glass-panel p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-earth-500/20 flex items-center justify-center">
-                  <Layers className="w-5 h-5 text-earth-400" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-400/20 to-accent-600/20 flex items-center justify-center ring-1 ring-accent-500/30">
+                  <Layers className="w-6 h-6 text-accent-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white">Architectural Blueprint</h3>
+                  <h3 className="font-semibold text-white text-lg">Architectural Blueprint</h3>
                   <p className="text-sm text-slate-500">Upload CAD drawings or design files</p>
                 </div>
               </div>
               
               <label
-                className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200 ${
+                className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${
                   uploadedFiles.blueprint
-                    ? 'border-earth-500/50 bg-earth-500/5'
-                    : 'border-slate-700/50 hover:border-slate-600'
+                    ? 'border-accent-500/50 bg-accent-500/5'
+                    : 'border-slate-700/50 hover:border-accent-500/50 hover:bg-slate-800/30'
                 }`}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleDrop(e, 'blueprint')}
               >
-                <input
-                  type="file"
-                  className="hidden"
-                  accept=".dwg,.dxf,.pdf,image/*"
-                  onChange={(e) => handleFileSelect(e, 'blueprint')}
-                />
+                <input type="file" className="hidden" accept=".dwg,.dxf,.pdf,image/*" onChange={(e) => handleFileSelect(e, 'blueprint')} />
                 {uploadedFiles.blueprint ? (
                   <div className="flex flex-col items-center">
-                    <CheckCircle2 className="w-12 h-12 text-earth-400 mb-3" />
+                    <div className="w-16 h-16 rounded-full bg-accent-500/20 flex items-center justify-center mb-3">
+                      <CheckCircle2 className="w-8 h-8 text-accent-400" />
+                    </div>
                     <p className="text-white font-medium">{uploadedFiles.blueprint.name}</p>
                     <p className="text-sm text-slate-500 mt-1">Click to reselect</p>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <Upload className="w-12 h-12 text-slate-500 mb-3" />
+                    <div className="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mb-3">
+                      <Upload className="w-8 h-8 text-slate-500" />
+                    </div>
                     <p className="text-slate-300">Drag file here or click to upload</p>
                     <p className="text-sm text-slate-500 mt-1">Supports DWG, DXF, PDF</p>
                   </div>
@@ -330,14 +344,17 @@ export function Blueprint() {
 
             {/* Generate button */}
             <div className="lg:col-span-2 flex justify-center">
-              <button
+              <motion.button
                 onClick={handleGenerate}
                 disabled={!uploadedFiles.scene || !uploadedFiles.blueprint}
-                className="btn-primary flex items-center gap-2 px-8 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary flex items-center gap-3 px-10 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <Zap className="w-6 h-6" />
                 Generate Blueprint
-              </button>
+                <Sparkles className="w-5 h-5" />
+              </motion.button>
             </div>
           </motion.div>
         )}
@@ -348,38 +365,51 @@ export function Blueprint() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="glass-panel p-12 text-center"
+            className="glass-panel p-12 text-center relative overflow-hidden"
           >
-            <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-forest-400/20 to-forest-600/20 border border-forest-500/30 flex items-center justify-center mb-6 animate-pulse">
-              <Zap className="w-10 h-10 text-forest-400" />
+            {/* Background animation */}
+            <div className="absolute inset-0 opacity-10">
+              <img src="/blueprint-sketch.jpg" alt="" className="w-full h-full object-cover" />
             </div>
-            <h2 className="text-xl font-display font-bold text-white mb-2">AI Analyzing Blueprint</h2>
-            <p className="text-slate-500 mb-8">Identifying structures and generating modular parts...</p>
             
-            <div className="max-w-md mx-auto space-y-3">
-              {[
-                'Analyzing building structure...',
-                'Identifying load requirements...',
-                'Matching renewable materials...',
-                'Generating part drawings...',
-              ].map((task, index) => (
-                <motion.div
-                  key={task}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.6 }}
-                  className="flex items-center gap-3 text-left"
-                >
+            <div className="relative">
+              <motion.div 
+                className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-primary-400/20 to-primary-600/20 border border-primary-500/30 flex items-center justify-center mb-6"
+                animate={{ 
+                  boxShadow: ['0 0 20px rgba(34, 197, 94, 0.3)', '0 0 60px rgba(34, 197, 94, 0.5)', '0 0 20px rgba(34, 197, 94, 0.3)']
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Zap className="w-12 h-12 text-primary-400" />
+              </motion.div>
+              <h2 className="text-2xl font-display font-bold text-white mb-2">AI Analyzing Blueprint</h2>
+              <p className="text-slate-500 mb-8">Identifying structures and generating modular parts...</p>
+              
+              <div className="max-w-md mx-auto space-y-3">
+                {[
+                  'Analyzing building structure...',
+                  'Identifying load requirements...',
+                  'Matching renewable materials...',
+                  'Generating part drawings...',
+                ].map((task, index) => (
                   <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: index * 0.6 + 0.3 }}
+                    key={task}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.6 }}
+                    className="flex items-center gap-3 text-left bg-slate-800/50 rounded-lg px-4 py-3"
                   >
-                    <CheckCircle2 className="w-5 h-5 text-forest-400" />
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: index * 0.6 + 0.3 }}
+                    >
+                      <CheckCircle2 className="w-5 h-5 text-primary-400" />
+                    </motion.div>
+                    <span className="text-slate-300">{task}</span>
                   </motion.div>
-                  <span className="text-slate-300">{task}</span>
-                </motion.div>
-              ))}
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
@@ -396,25 +426,25 @@ export function Blueprint() {
               {/* 3D Lego visualization */}
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-white flex items-center gap-2">
-                    <Box className="w-5 h-5 text-forest-400" />
+                  <h3 className="font-semibold text-white flex items-center gap-2 text-lg">
+                    <Box className="w-5 h-5 text-primary-400" />
                     Modular Parts Preview
                   </h3>
-                  <button className="btn-secondary text-sm py-2 px-3 flex items-center gap-1">
+                  <motion.button 
+                    className="btn-secondary text-sm py-2 px-4 flex items-center gap-2"
+                    whileHover={{ scale: 1.02 }}
+                  >
                     <Eye className="w-4 h-4" />
                     3D View
-                  </button>
+                  </motion.button>
                 </div>
                 
                 <LegoVisualization />
                 
                 <div className="mt-4 flex flex-wrap gap-2">
                   {Object.entries(MATERIAL_COLORS).slice(0, 6).map(([key, value]) => (
-                    <div key={key} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50">
-                      <div
-                        className="w-3 h-3 rounded"
-                        style={{ backgroundColor: value.light }}
-                      />
+                    <div key={key} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 border border-slate-700/30">
+                      <div className="w-3 h-3 rounded" style={{ backgroundColor: value.light }} />
                       <span className="text-xs text-slate-400">{value.name}</span>
                     </div>
                   ))}
@@ -424,53 +454,50 @@ export function Blueprint() {
               {/* Material requirements */}
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-white flex items-center gap-2">
-                    <Leaf className="w-5 h-5 text-forest-400" />
+                  <h3 className="font-semibold text-white flex items-center gap-2 text-lg">
+                    <Leaf className="w-5 h-5 text-primary-400" />
                     Material Requirements
                   </h3>
-                  <button className="btn-secondary text-sm py-2 px-3 flex items-center gap-1">
+                  <motion.button 
+                    className="btn-secondary text-sm py-2 px-4 flex items-center gap-2"
+                    whileHover={{ scale: 1.02 }}
+                  >
                     <Download className="w-4 h-4" />
                     Export
-                  </button>
+                  </motion.button>
                 </div>
                 
                 <div className="space-y-3 max-h-80 overflow-y-auto">
                   {mockMaterialRequirements.map((req) => {
                     const colors = MATERIAL_COLORS[req.material];
                     return (
-                      <div
+                      <motion.div
                         key={req.material}
-                        className="flex items-center justify-between p-3 rounded-xl bg-slate-800/40 border border-slate-700/30"
+                        className="flex items-center justify-between p-3 rounded-xl bg-slate-800/40 border border-slate-700/30 hover:border-primary-500/30 transition-all"
+                        whileHover={{ scale: 1.01 }}
                       >
                         <div className="flex items-center gap-3">
-                          <div
-                            className="w-10 h-10 rounded-lg"
-                            style={{ backgroundColor: colors.light }}
-                          />
+                          <div className="w-10 h-10 rounded-lg" style={{ backgroundColor: colors.light }} />
                           <div>
                             <p className="font-medium text-white">{colors.name}</p>
-                            <p className="text-sm text-slate-500">
-                              Load: {req.loadRequirement} kg/m²
-                            </p>
+                            <p className="text-sm text-slate-500">Load: {req.loadRequirement} kg/m²</p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="font-display font-bold text-white">
-                            {req.quantity.toLocaleString()}
-                          </p>
+                          <p className="font-display font-bold text-white">{req.quantity.toLocaleString()}</p>
                           <p className="text-sm text-slate-500">{req.unit}</p>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
                 
-                <div className="mt-4 p-4 rounded-xl bg-forest-500/10 border border-forest-500/20">
-                  <div className="flex items-center gap-2 text-forest-400 mb-2">
+                <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-primary-500/10 to-primary-500/5 border border-primary-500/20">
+                  <div className="flex items-center gap-2 text-primary-400 mb-2">
                     <Scale className="w-5 h-5" />
                     <span className="font-medium">Total Parts</span>
                   </div>
-                  <p className="text-2xl font-display font-bold text-white">2,847 pieces</p>
+                  <p className="text-3xl font-display font-bold text-white">2,847 pieces</p>
                 </div>
               </div>
             </div>
@@ -478,8 +505,8 @@ export function Blueprint() {
             {/* Compliance report */}
             <div className="glass-panel p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="font-semibold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-forest-400" />
+                <h3 className="font-semibold text-white flex items-center gap-2 text-lg">
+                  <CheckCircle2 className="w-5 h-5 text-primary-400" />
                   Compliance Audit Report
                 </h3>
                 <div className="flex items-center gap-3">
@@ -487,56 +514,66 @@ export function Blueprint() {
                     <CheckCircle2 className="w-4 h-4" />
                     Compliant
                   </span>
-                  <button className="btn-secondary text-sm py-2 px-3 flex items-center gap-1">
+                  <motion.button 
+                    className="btn-secondary text-sm py-2 px-4 flex items-center gap-2"
+                    whileHover={{ scale: 1.02 }}
+                  >
                     <Download className="w-4 h-4" />
-                    Download Full Report
-                  </button>
+                    Download Report
+                  </motion.button>
                 </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {mockComplianceChecks.map((check) => (
-                  <div
+                  <motion.div
                     key={check.name}
                     className={`p-4 rounded-xl border ${
                       check.status === 'pass'
-                        ? 'bg-forest-500/5 border-forest-500/20'
+                        ? 'bg-primary-500/5 border-primary-500/20'
                         : check.status === 'warning'
-                        ? 'bg-amber-500/5 border-amber-500/20'
+                        ? 'bg-accent-500/5 border-accent-500/20'
                         : 'bg-red-500/5 border-red-500/20'
                     }`}
+                    whileHover={{ scale: 1.01 }}
                   >
                     <div className="flex items-start gap-3">
                       {check.status === 'pass' ? (
-                        <CheckCircle2 className="w-5 h-5 text-forest-400 flex-shrink-0 mt-0.5" />
-                      ) : check.status === 'warning' ? (
-                        <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" />
                       ) : (
-                        <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                        <AlertTriangle className="w-5 h-5 text-accent-400 flex-shrink-0 mt-0.5" />
                       )}
                       <div>
                         <p className="font-medium text-white text-sm">{check.name}</p>
                         <p className="text-xs text-slate-500 mt-1">{check.description}</p>
                         {check.recommendation && (
-                          <p className="text-xs text-amber-400 mt-2">⚠️ {check.recommendation}</p>
+                          <p className="text-xs text-accent-400 mt-2">⚠️ {check.recommendation}</p>
                         )}
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
 
             {/* Action buttons */}
             <div className="flex justify-center gap-4">
-              <button className="btn-secondary flex items-center gap-2">
+              <motion.button 
+                className="btn-secondary flex items-center gap-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 <Eye className="w-5 h-5" />
                 Preview Full Blueprint
-              </button>
-              <button className="btn-primary flex items-center gap-2">
+              </motion.button>
+              <motion.button 
+                className="btn-primary flex items-center gap-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 <ArrowRight className="w-5 h-5" />
                 Send to Factory
-              </button>
+              </motion.button>
             </div>
           </motion.div>
         )}

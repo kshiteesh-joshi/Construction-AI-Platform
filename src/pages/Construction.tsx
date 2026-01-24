@@ -15,6 +15,7 @@ import {
   ArrowRight,
   ArrowLeft,
   RotateCcw,
+  Hammer,
 } from 'lucide-react';
 import type { ConstructionPhase, BuildingPart, MaterialType } from '../types';
 import { MATERIAL_COLORS } from '../types';
@@ -90,15 +91,15 @@ const currentPhaseParts: BuildingPart[] = [
 
 const phaseStatusConfig = {
   pending: { color: 'text-slate-400', bg: 'bg-slate-500/20', border: 'border-slate-500/30', icon: Clock, label: 'Pending' },
-  'in-progress': { color: 'text-forest-400', bg: 'bg-forest-500/20', border: 'border-forest-500/30', icon: Play, label: 'In Progress' },
-  completed: { color: 'text-blue-400', bg: 'bg-blue-500/20', border: 'border-blue-500/30', icon: CheckCircle2, label: 'Completed' },
+  'in-progress': { color: 'text-primary-400', bg: 'bg-primary-500/20', border: 'border-primary-500/30', icon: Play, label: 'In Progress' },
+  completed: { color: 'text-secondary-400', bg: 'bg-secondary-500/20', border: 'border-secondary-500/30', icon: CheckCircle2, label: 'Completed' },
 };
 
 const partStatusConfig = {
   pending: { color: 'text-slate-400', bg: 'bg-slate-500/20', label: 'Pending' },
-  cutting: { color: 'text-amber-400', bg: 'bg-amber-500/20', label: 'Production' },
-  ready: { color: 'text-forest-400', bg: 'bg-forest-500/20', label: 'Ready' },
-  installed: { color: 'text-blue-400', bg: 'bg-blue-500/20', label: 'Installed' },
+  cutting: { color: 'text-accent-400', bg: 'bg-accent-500/20', label: 'Production' },
+  ready: { color: 'text-primary-400', bg: 'bg-primary-500/20', label: 'Ready' },
+  installed: { color: 'text-secondary-400', bg: 'bg-secondary-500/20', label: 'Installed' },
   verified: { color: 'text-purple-400', bg: 'bg-purple-500/20', label: 'Verified' },
 };
 
@@ -106,7 +107,7 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.08 },
   },
 };
 
@@ -146,93 +147,112 @@ export function Construction() {
       animate="visible"
       className="space-y-6"
     >
-      {/* Page header */}
-      <motion.div variants={itemVariants} className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-display font-bold text-white">Construction Progress</h1>
-          <p className="text-slate-500 mt-1">Sequential assembly and disassembly for structural integrity</p>
+      {/* Hero Section with Stone Background */}
+      <motion.div 
+        variants={itemVariants} 
+        className="relative rounded-2xl overflow-hidden"
+      >
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src="/stone.jpg" 
+            alt="Stone texture" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/85 to-slate-900/70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center bg-slate-800/50 rounded-xl p-1">
-            <button
-              onClick={() => setMode('build')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                mode === 'build'
-                  ? 'bg-forest-500 text-white shadow-lg'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <ArrowRight className="w-4 h-4 inline mr-2" />
-              Build Mode
-            </button>
-            <button
-              onClick={() => setMode('disassemble')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                mode === 'disassemble'
-                  ? 'bg-amber-500 text-white shadow-lg'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <ArrowLeft className="w-4 h-4 inline mr-2" />
-              Disassemble Mode
-            </button>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Stats cards */}
-      <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-panel p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-forest-500/20 flex items-center justify-center">
-              <HardHat className="w-5 h-5 text-forest-400" />
+        
+        {/* Content */}
+        <div className="relative p-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Hammer className="w-5 h-5 text-primary-400" />
+                <span className="text-sm font-medium text-primary-400">Active Construction</span>
+              </div>
+              <h1 className="text-3xl font-display font-bold text-white mb-2">Construction Progress</h1>
+              <p className="text-slate-400 max-w-lg">Sequential assembly and disassembly for structural integrity</p>
             </div>
-            <span className="text-slate-400">Construction Phase</span>
-          </div>
-          <p className="text-2xl font-display font-bold text-white">
-            {completedPhases} <span className="text-sm text-slate-500 font-normal">/ {mockPhases.length}</span>
-          </p>
-          <div className="progress-bar mt-2">
-            <div
-              className="progress-bar-fill"
-              style={{ width: `${(completedPhases / mockPhases.length) * 100}%` }}
-            />
-          </div>
-        </div>
-
-        <div className="glass-panel p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-blue-400" />
+            <div className="flex items-center gap-3">
+              <div className="flex items-center bg-slate-800/70 backdrop-blur-sm rounded-xl p-1 border border-slate-700/50">
+                <motion.button
+                  onClick={() => setMode('build')}
+                  className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    mode === 'build'
+                      ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/30'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                  whileHover={{ scale: mode === 'build' ? 1 : 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <ArrowRight className="w-4 h-4 inline mr-2" />
+                  Build
+                </motion.button>
+                <motion.button
+                  onClick={() => setMode('disassemble')}
+                  className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    mode === 'disassemble'
+                      ? 'bg-gradient-to-r from-accent-500 to-accent-600 text-white shadow-lg shadow-accent-500/30'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                  whileHover={{ scale: mode === 'disassemble' ? 1 : 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <ArrowLeft className="w-4 h-4 inline mr-2" />
+                  Disassemble
+                </motion.button>
+              </div>
             </div>
-            <span className="text-slate-400">Timeline Progress</span>
           </div>
-          <p className="text-2xl font-display font-bold text-white">
-            {elapsedDuration} <span className="text-sm text-slate-500 font-normal">/ {totalDuration} days</span>
-          </p>
-        </div>
-
-        <div className="glass-panel p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-earth-500/20 flex items-center justify-center">
-              <Package className="w-5 h-5 text-earth-400" />
+          
+          {/* Quick Stats */}
+          <div className="grid grid-cols-4 gap-4 mt-6">
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary-500/20 flex items-center justify-center">
+                  <HardHat className="w-5 h-5 text-primary-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">{completedPhases}/{mockPhases.length}</p>
+                  <p className="text-xs text-slate-400">Phases Done</p>
+                </div>
+              </div>
             </div>
-            <span className="text-slate-400">Current Phase Parts</span>
-          </div>
-          <p className="text-2xl font-display font-bold text-white">
-            {installedParts} <span className="text-sm text-slate-500 font-normal">/ {currentPhaseParts.length} installed</span>
-          </p>
-        </div>
-
-        <div className="glass-panel p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-              <Users className="w-5 h-5 text-amber-400" />
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-secondary-500/20 flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-secondary-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">{elapsedDuration}d</p>
+                  <p className="text-xs text-slate-400">of {totalDuration} days</p>
+                </div>
+              </div>
             </div>
-            <span className="text-slate-400">Construction Team</span>
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-accent-500/20 flex items-center justify-center">
+                  <Package className="w-5 h-5 text-accent-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">{installedParts}/{currentPhaseParts.length}</p>
+                  <p className="text-xs text-slate-400">Parts Installed</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-purple-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">12</p>
+                  <p className="text-xs text-slate-400">Workers Active</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-2xl font-display font-bold text-white">12 workers</p>
-          <p className="text-xs text-slate-500 mt-1">4 teams working in parallel</p>
         </div>
       </motion.div>
 
@@ -250,31 +270,29 @@ export function Construction() {
 
               return (
                 <div key={phase.id}>
-                  <button
+                  <motion.button
                     onClick={() => {
                       setSelectedPhase(phase.id);
                       togglePhase(phase.id);
                     }}
                     className={`w-full p-4 rounded-xl text-left transition-all duration-200 ${
                       isSelected
-                        ? 'bg-slate-700/50 border border-forest-500/50'
-                        : 'bg-slate-800/40 border border-slate-700/30 hover:border-slate-600/50'
+                        ? 'bg-slate-700/50 border border-primary-500/50'
+                        : 'bg-slate-800/40 border border-slate-700/30 hover:border-primary-500/30'
                     }`}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
                   >
                     <div className="flex items-center gap-3">
-                      <div
-                        className={`w-10 h-10 rounded-xl ${status.bg} flex items-center justify-center`}
-                      >
+                      <div className={`w-10 h-10 rounded-xl ${status.bg} flex items-center justify-center`}>
                         <StatusIcon className={`w-5 h-5 ${status.color}`} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-slate-500">
-                            {mode === 'disassemble' ? 'Disassemble' : 'Phase'} {mode === 'disassemble' ? mockPhases.length - index : index + 1}
+                            {mode === 'disassemble' ? 'Remove' : 'Phase'} {mode === 'disassemble' ? mockPhases.length - index : index + 1}
                           </span>
-                          <span
-                            className={`px-2 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.color}`}
-                          >
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.color}`}>
                             {status.label}
                           </span>
                         </div>
@@ -286,7 +304,7 @@ export function Construction() {
                         <ChevronRight className="w-5 h-5 text-slate-500" />
                       )}
                     </div>
-                  </button>
+                  </motion.button>
 
                   <AnimatePresence>
                     {isExpanded && (
@@ -304,13 +322,7 @@ export function Construction() {
                               Est. {phase.estimatedDuration} days
                             </div>
                             {phase.actualDuration && (
-                              <div
-                                className={`flex items-center gap-1 ${
-                                  phase.actualDuration <= phase.estimatedDuration
-                                    ? 'text-forest-400'
-                                    : 'text-amber-400'
-                                }`}
-                              >
+                              <div className={`flex items-center gap-1 ${phase.actualDuration <= phase.estimatedDuration ? 'text-primary-400' : 'text-accent-400'}`}>
                                 Actual {phase.actualDuration} days
                               </div>
                             )}
@@ -338,40 +350,51 @@ export function Construction() {
                   </span>
                   <span className="text-slate-500">Phase 3 / 6</span>
                 </div>
-                <h2 className="text-xl font-display font-bold text-white">Wall Installation</h2>
+                <h2 className="text-2xl font-display font-bold text-white">Wall Installation</h2>
                 <p className="text-slate-400 mt-1">Installing hempcrete wall panels and insulation layers</p>
               </div>
-              <div className="flex items-center gap-2">
-                <button className="btn-secondary py-2 px-4 flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  View Location
-                </button>
-              </div>
+              <motion.button 
+                className="btn-secondary py-2 px-4 flex items-center gap-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <MapPin className="w-4 h-4" />
+                View Location
+              </motion.button>
             </div>
 
             {/* Progress visualization */}
             <div className="grid grid-cols-3 gap-4 mb-6">
-              <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-center">
-                <p className="text-2xl font-display font-bold text-blue-400">{installedParts}</p>
+              <motion.div 
+                className="p-4 rounded-xl bg-secondary-500/10 border border-secondary-500/20 text-center"
+                whileHover={{ scale: 1.02 }}
+              >
+                <p className="text-3xl font-display font-bold text-secondary-400">{installedParts}</p>
                 <p className="text-sm text-slate-400">Installed</p>
-              </div>
-              <div className="p-4 rounded-xl bg-forest-500/10 border border-forest-500/20 text-center">
-                <p className="text-2xl font-display font-bold text-forest-400">{readyParts}</p>
+              </motion.div>
+              <motion.div 
+                className="p-4 rounded-xl bg-primary-500/10 border border-primary-500/20 text-center"
+                whileHover={{ scale: 1.02 }}
+              >
+                <p className="text-3xl font-display font-bold text-primary-400">{readyParts}</p>
                 <p className="text-sm text-slate-400">Ready</p>
-              </div>
-              <div className="p-4 rounded-xl bg-slate-500/10 border border-slate-500/20 text-center">
-                <p className="text-2xl font-display font-bold text-slate-400">
+              </motion.div>
+              <motion.div 
+                className="p-4 rounded-xl bg-slate-500/10 border border-slate-500/20 text-center"
+                whileHover={{ scale: 1.02 }}
+              >
+                <p className="text-3xl font-display font-bold text-slate-400">
                   {currentPhaseParts.length - installedParts - readyParts}
                 </p>
                 <p className="text-sm text-slate-400">In Production</p>
-              </div>
+              </motion.div>
             </div>
 
             {/* Alert */}
-            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+            <div className="p-4 rounded-xl bg-accent-500/10 border border-accent-500/20 flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-accent-400 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-amber-400">Construction Notice</p>
+                <p className="text-sm font-medium text-accent-400">Construction Notice</p>
                 <p className="text-sm text-slate-400 mt-1">
                   Insulation B-001 and B-002 are ready. Please install immediately after Exterior Wall A-003 to ensure structural integrity.
                 </p>
@@ -382,11 +405,14 @@ export function Construction() {
           {/* Parts list */}
           <div className="glass-panel p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-white">Parts Installation Sequence</h3>
-              <button className="text-sm text-forest-400 hover:text-forest-300 flex items-center gap-1">
+              <h3 className="font-semibold text-white text-lg">Parts Installation Sequence</h3>
+              <motion.button 
+                className="text-sm text-primary-400 hover:text-primary-300 flex items-center gap-1"
+                whileHover={{ x: 2 }}
+              >
                 <RotateCcw className="w-4 h-4" />
                 Reset Sequence
-              </button>
+              </motion.button>
             </div>
 
             <div className="space-y-2">
@@ -404,7 +430,7 @@ export function Construction() {
                       key={part.id}
                       className={`p-4 rounded-xl border transition-all duration-200 ${
                         canInstall
-                          ? 'bg-forest-500/10 border-forest-500/30'
+                          ? 'bg-primary-500/10 border-primary-500/30'
                           : 'bg-slate-800/40 border-slate-700/30'
                       }`}
                       whileHover={{ scale: 1.01 }}
@@ -414,10 +440,7 @@ export function Construction() {
                           <span className="w-8 h-8 rounded-lg bg-slate-700/50 flex items-center justify-center text-sm font-mono text-slate-400">
                             {mode === 'disassemble' ? currentPhaseParts.length - index : index + 1}
                           </span>
-                          <div
-                            className="w-12 h-12 rounded-xl"
-                            style={{ backgroundColor: materialColor.light }}
-                          />
+                          <div className="w-12 h-12 rounded-xl" style={{ backgroundColor: materialColor.light }} />
                         </div>
                         
                         <div className="flex-1 min-w-0">
@@ -428,16 +451,18 @@ export function Construction() {
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <span
-                            className={`px-3 py-1 rounded-lg text-sm font-medium ${partStatus.bg} ${partStatus.color}`}
-                          >
+                          <span className={`px-3 py-1 rounded-lg text-sm font-medium ${partStatus.bg} ${partStatus.color}`}>
                             {partStatus.label}
                           </span>
                           
                           {canInstall && (
-                            <button className="btn-primary py-2 px-4 text-sm">
-                              {mode === 'build' ? 'Confirm Install' : 'Confirm Remove'}
-                            </button>
+                            <motion.button 
+                              className="btn-primary py-2 px-4 text-sm"
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              {mode === 'build' ? 'Install' : 'Remove'}
+                            </motion.button>
                           )}
                         </div>
                       </div>

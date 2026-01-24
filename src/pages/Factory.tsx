@@ -5,7 +5,6 @@ import {
   Bot,
   Package,
   Clock,
-  AlertTriangle,
   CheckCircle2,
   Play,
   Pause,
@@ -36,16 +35,16 @@ const mockParts: BuildingPart[] = [
 
 const statusConfig = {
   idle: { color: 'text-slate-400', bg: 'bg-slate-500/20', border: 'border-slate-500/30', label: 'Idle' },
-  cutting: { color: 'text-forest-400', bg: 'bg-forest-500/20', border: 'border-forest-500/30', label: 'Cutting' },
-  maintenance: { color: 'text-amber-400', bg: 'bg-amber-500/20', border: 'border-amber-500/30', label: 'Maintenance' },
+  cutting: { color: 'text-primary-400', bg: 'bg-primary-500/20', border: 'border-primary-500/30', label: 'Cutting' },
+  maintenance: { color: 'text-accent-400', bg: 'bg-accent-500/20', border: 'border-accent-500/30', label: 'Maintenance' },
   error: { color: 'text-red-400', bg: 'bg-red-500/20', border: 'border-red-500/30', label: 'Error' },
 };
 
 const partStatusConfig = {
   pending: { color: 'text-slate-400', bg: 'bg-slate-500/20', label: 'Pending' },
-  cutting: { color: 'text-amber-400', bg: 'bg-amber-500/20', label: 'Cutting' },
-  ready: { color: 'text-forest-400', bg: 'bg-forest-500/20', label: 'Ready' },
-  installed: { color: 'text-blue-400', bg: 'bg-blue-500/20', label: 'Installed' },
+  cutting: { color: 'text-accent-400', bg: 'bg-accent-500/20', label: 'Cutting' },
+  ready: { color: 'text-primary-400', bg: 'bg-primary-500/20', label: 'Ready' },
+  installed: { color: 'text-secondary-400', bg: 'bg-secondary-500/20', label: 'Installed' },
   verified: { color: 'text-purple-400', bg: 'bg-purple-500/20', label: 'Verified' },
 };
 
@@ -53,7 +52,7 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.08 },
   },
 };
 
@@ -105,69 +104,96 @@ export function Factory() {
       animate="visible"
       className="space-y-6"
     >
-      {/* Page header */}
-      <motion.div variants={itemVariants} className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-display font-bold text-white">Factory Monitor</h1>
-          <p className="text-slate-500 mt-1">Real-time monitoring of cutting robots and production progress</p>
+      {/* Hero Section with Background Image */}
+      <motion.div 
+        variants={itemVariants} 
+        className="relative rounded-2xl overflow-hidden"
+      >
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src="/robot_factory.webp" 
+            alt="Factory" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
         </div>
-        <div className="flex items-center gap-3">
-          <button className="btn-secondary flex items-center gap-2">
-            <RefreshCw className="w-5 h-5" />
-            Refresh
-          </button>
-          <button className="btn-primary flex items-center gap-2">
-            <Settings className="w-5 h-5" />
-            Robot Settings
-          </button>
-        </div>
-      </motion.div>
-
-      {/* Overview stats */}
-      <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-panel p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-forest-500/20 flex items-center justify-center">
-              <Package className="w-5 h-5 text-forest-400" />
+        
+        {/* Content */}
+        <div className="relative p-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-display font-bold text-white mb-2">Factory Monitor</h1>
+              <p className="text-slate-400 max-w-lg">Real-time monitoring of cutting robots and production progress</p>
             </div>
-            <span className="text-slate-400">Overall Progress</span>
-          </div>
-          <p className="text-2xl font-display font-bold text-white">{overallProgress.toFixed(1)}%</p>
-          <div className="progress-bar mt-2">
-            <div className="progress-bar-fill" style={{ width: `${overallProgress}%` }} />
-          </div>
-        </div>
-
-        <div className="glass-panel p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-forest-500/20 flex items-center justify-center">
-              <CheckCircle2 className="w-5 h-5 text-forest-400" />
+            <div className="flex items-center gap-3">
+              <motion.button 
+                className="btn-secondary flex items-center gap-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <RefreshCw className="w-5 h-5" />
+                Refresh
+              </motion.button>
+              <motion.button 
+                className="btn-primary flex items-center gap-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Settings className="w-5 h-5" />
+                Robot Settings
+              </motion.button>
             </div>
-            <span className="text-slate-400">Completed Parts</span>
           </div>
-          <p className="text-2xl font-display font-bold text-white">
-            {totalCompleted} <span className="text-sm text-slate-500 font-normal">/ {totalParts}</span>
-          </p>
-        </div>
-
-        <div className="glass-panel p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-amber-400" />
+          
+          {/* Quick Stats */}
+          <div className="grid grid-cols-4 gap-4 mt-6">
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary-500/20 flex items-center justify-center">
+                  <Package className="w-5 h-5 text-primary-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">{overallProgress.toFixed(1)}%</p>
+                  <p className="text-xs text-slate-400">Overall Progress</p>
+                </div>
+              </div>
             </div>
-            <span className="text-slate-400">Now Cutting</span>
-          </div>
-          <p className="text-2xl font-display font-bold text-white">{cuttingParts} parts</p>
-        </div>
-
-        <div className="glass-panel p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-              <Clock className="w-5 h-5 text-blue-400" />
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary-500/20 flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5 text-primary-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">{totalCompleted}</p>
+                  <p className="text-xs text-slate-400">Parts Completed</p>
+                </div>
+              </div>
             </div>
-            <span className="text-slate-400">Est. Completion</span>
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-accent-500/20 flex items-center justify-center">
+                  <Zap className="w-5 h-5 text-accent-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">{cuttingParts}</p>
+                  <p className="text-xs text-slate-400">Now Cutting</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-secondary-500/20 flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-secondary-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">4.5h</p>
+                  <p className="text-xs text-slate-400">Est. Completion</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-2xl font-display font-bold text-white">4.5 hours</p>
         </div>
       </motion.div>
 
@@ -175,11 +201,12 @@ export function Factory() {
         {/* Robots panel */}
         <motion.div variants={itemVariants} className="lg:col-span-2 glass-panel p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-display font-semibold text-white flex items-center gap-2">
-              <Bot className="w-5 h-5 text-forest-400" />
+            <h2 className="text-xl font-display font-semibold text-white flex items-center gap-2">
+              <Bot className="w-5 h-5 text-primary-400" />
               Cutting Robot Status
             </h2>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-sm text-slate-400">
+              <span className="w-2 h-2 rounded-full bg-primary-400 animate-pulse" />
               {robots.filter((r) => r.status === 'cutting').length} running
             </div>
           </div>
@@ -190,10 +217,10 @@ export function Factory() {
               return (
                 <motion.div
                   key={robot.id}
-                  className={`p-4 rounded-xl border transition-all duration-200 cursor-pointer ${
+                  className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer ${
                     selectedRobot === robot.id
-                      ? 'bg-slate-700/50 border-forest-500/50'
-                      : 'bg-slate-800/40 border-slate-700/30 hover:border-slate-600/50'
+                      ? 'bg-slate-700/50 border-primary-500/50'
+                      : 'bg-slate-800/40 border-slate-700/30 hover:border-primary-500/30'
                   }`}
                   onClick={() => setSelectedRobot(robot.id === selectedRobot ? null : robot.id)}
                   whileHover={{ scale: 1.02 }}
@@ -201,18 +228,14 @@ export function Factory() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div
-                        className={`w-12 h-12 rounded-xl ${status.bg} flex items-center justify-center`}
-                      >
+                      <div className={`w-12 h-12 rounded-xl ${status.bg} flex items-center justify-center`}>
                         <Bot className={`w-6 h-6 ${status.color}`} />
                       </div>
                       <div>
                         <p className="font-medium text-white">{robot.name}</p>
-                        <span
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.color} border ${status.border}`}
-                        >
+                        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.color} border ${status.border}`}>
                           {robot.status === 'cutting' && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-forest-400 animate-pulse" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-pulse" />
                           )}
                           {status.label}
                         </span>
@@ -224,8 +247,8 @@ export function Factory() {
                       </button>
                     )}
                     {robot.status === 'idle' && (
-                      <button className="p-2 rounded-lg bg-forest-500/20 hover:bg-forest-500/30 transition-colors">
-                        <Play className="w-4 h-4 text-forest-400" />
+                      <button className="p-2 rounded-lg bg-primary-500/20 hover:bg-primary-500/30 transition-colors">
+                        <Play className="w-4 h-4 text-primary-400" />
                       </button>
                     )}
                   </div>
@@ -233,31 +256,23 @@ export function Factory() {
                   {robot.status === 'cutting' && (
                     <div className="mb-3">
                       <div className="flex items-center justify-between text-sm mb-1">
-                        <span className="text-slate-400">Current Part: {robot.currentPart}</span>
-                        <span className="text-white">{robot.progress.toFixed(0)}%</span>
+                        <span className="text-slate-400">Current: {robot.currentPart}</span>
+                        <span className="text-white font-medium">{robot.progress.toFixed(0)}%</span>
                       </div>
                       <div className="progress-bar">
-                        <motion.div
-                          className="progress-bar-fill"
-                          style={{ width: `${robot.progress}%` }}
-                        />
+                        <motion.div className="progress-bar-fill" style={{ width: `${robot.progress}%` }} />
                       </div>
                     </div>
                   )}
 
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-500">Completion Progress</span>
-                    <span className="text-white font-medium">
-                      {robot.partsCompleted}/{robot.totalParts}
-                    </span>
+                    <span className="text-slate-500">Total Progress</span>
+                    <span className="text-white font-medium">{robot.partsCompleted}/{robot.totalParts}</span>
                   </div>
                   <div className="progress-bar mt-1">
                     <div
                       className="progress-bar-fill"
-                      style={{
-                        width: `${(robot.partsCompleted / robot.totalParts) * 100}%`,
-                        background: 'linear-gradient(90deg, #4ade80, #22c55e)',
-                      }}
+                      style={{ width: `${(robot.partsCompleted / robot.totalParts) * 100}%` }}
                     />
                   </div>
                 </motion.div>
@@ -271,9 +286,9 @@ export function Factory() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-display font-semibold text-white">Parts Queue</h2>
             <div className="flex items-center gap-2 text-sm">
-              <span className="w-2 h-2 rounded-full bg-forest-400" />
+              <span className="w-2 h-2 rounded-full bg-primary-400" />
               <span className="text-slate-400">{readyParts} ready</span>
-              <span className="w-2 h-2 rounded-full bg-amber-400 ml-2" />
+              <span className="w-2 h-2 rounded-full bg-accent-400 ml-2" />
               <span className="text-slate-400">{pendingParts} pending</span>
             </div>
           </div>
@@ -284,41 +299,34 @@ export function Factory() {
               const partStatus = partStatusConfig[part.status];
               
               return (
-                <div
+                <motion.div
                   key={part.id}
                   className="p-3 rounded-xl bg-slate-800/40 border border-slate-700/30 hover:border-slate-600/50 transition-all duration-200"
+                  whileHover={{ scale: 1.01 }}
                 >
                   <div className="flex items-center gap-3">
                     <div
                       className="w-10 h-10 rounded-lg flex items-center justify-center"
                       style={{ backgroundColor: materialColor.light }}
                     >
-                      <span className="text-xs font-bold text-slate-800">
-                        {part.sequence}
-                      </span>
+                      <span className="text-xs font-bold text-slate-800">{part.sequence}</span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-medium text-white text-sm truncate">
-                          {part.name}
-                        </p>
+                        <p className="font-medium text-white text-sm truncate">{part.name}</p>
                         {part.tag && (
-                          <span className="px-1.5 py-0.5 rounded bg-slate-700 text-xs text-slate-400 font-mono">
-                            {part.tag}
-                          </span>
+                          <span className="px-1.5 py-0.5 rounded bg-slate-700 text-xs text-slate-400 font-mono">{part.tag}</span>
                         )}
                       </div>
                       <p className="text-xs text-slate-500">
                         {materialColor.name} · {part.dimensions.width}×{part.dimensions.height}×{part.dimensions.depth}mm
                       </p>
                     </div>
-                    <span
-                      className={`px-2 py-1 rounded-lg text-xs font-medium ${partStatus.bg} ${partStatus.color}`}
-                    >
+                    <span className={`px-2 py-1 rounded-lg text-xs font-medium ${partStatus.bg} ${partStatus.color}`}>
                       {partStatus.label}
                     </span>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
@@ -328,8 +336,8 @@ export function Factory() {
       {/* Production analytics */}
       <motion.div variants={itemVariants} className="glass-panel p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-display font-semibold text-white flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-forest-400" />
+          <h2 className="text-xl font-display font-semibold text-white flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-primary-400" />
             Material Usage Statistics
           </h2>
         </div>
@@ -338,17 +346,21 @@ export function Factory() {
           {Object.entries(MATERIAL_COLORS).slice(0, 6).map(([key, value]) => {
             const percentage = Math.random() * 30 + 50;
             return (
-              <div key={key} className="text-center">
+              <motion.div 
+                key={key} 
+                className="text-center"
+                whileHover={{ scale: 1.05 }}
+              >
                 <div
-                  className="w-full aspect-square rounded-xl mb-3 flex items-center justify-center relative overflow-hidden"
-                  style={{ backgroundColor: `${value.light}20` }}
+                  className="w-full aspect-square rounded-xl mb-3 flex items-center justify-center relative overflow-hidden border border-slate-700/50"
+                  style={{ backgroundColor: `${value.light}15` }}
                 >
                   <div
                     className="absolute bottom-0 left-0 right-0 transition-all duration-500"
                     style={{
                       height: `${percentage}%`,
                       backgroundColor: value.light,
-                      opacity: 0.5,
+                      opacity: 0.4,
                     }}
                   />
                   <span className="relative text-2xl font-display font-bold text-white">
@@ -357,7 +369,7 @@ export function Factory() {
                 </div>
                 <p className="text-sm text-white font-medium">{value.name}</p>
                 <p className="text-xs text-slate-500">Used</p>
-              </div>
+              </motion.div>
             );
           })}
         </div>
