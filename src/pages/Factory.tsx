@@ -113,21 +113,23 @@ function MaterialUsageStats() {
                   <img 
                     src={value.image} 
                     alt={value.name} 
-                    className="absolute inset-0 w-full h-full object-cover opacity-30"
+                    className="absolute inset-0 w-full h-full object-cover opacity-60"
                   />
                 )}
-                {/* Dark overlay */}
-                <div className="absolute inset-0 bg-slate-900/40" />
-                {/* Animated fill */}
+                {/* Subtle dark overlay for text readability */}
+                <div className="absolute inset-0 bg-slate-900/20" />
+                {/* Animated fill - semi-transparent to show image */}
                 <motion.div
-                  className="absolute bottom-0 left-0 right-0"
+                  className="absolute bottom-0 left-0 right-0 mix-blend-overlay"
                   initial={{ height: '0%' }}
                   animate={{ height: `${percentage}%` }}
                   transition={{ duration: 0.3, ease: 'easeOut' }}
-                  style={{ backgroundColor: value.light }}
+                  style={{ 
+                    background: `linear-gradient(to top, ${value.light}90, ${value.light}50)`,
+                  }}
                 >
                   {/* Shimmer effect */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent animate-pulse" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/10 via-white/30 to-transparent animate-pulse" />
                 </motion.div>
                 {/* Percentage text */}
                 <span className="relative z-10 text-2xl font-display font-bold text-white drop-shadow-lg">
