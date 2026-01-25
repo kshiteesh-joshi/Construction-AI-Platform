@@ -37,7 +37,7 @@ export function Layout() {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary-400/30 to-accent-500/30 rounded-2xl blur-xl" />
               <img 
-                src="/lithos-logo.png" 
+                src="/new-logo.png" 
                 alt="Lithos.AI Logo" 
                 className="relative w-12 h-12 rounded-2xl object-cover shadow-lg ring-1 ring-white/10"
               />
