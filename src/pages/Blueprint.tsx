@@ -134,7 +134,7 @@ function PartsStackVisualization() {
   ];
 
   return (
-    <div className="relative w-full h-[600px] flex items-center justify-center">
+    <div className="relative w-full h-[600px] flex items-center justify-center pt-16">
       <div className="relative w-full max-w-lg h-full flex items-center justify-center">
         {parts.map((part, index) => {
           const isHovered = hoveredIndex === index;
