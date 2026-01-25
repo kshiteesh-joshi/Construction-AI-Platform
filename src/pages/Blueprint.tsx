@@ -134,27 +134,29 @@ function PartsStackVisualization() {
   ];
 
   return (
-    <div className="relative w-full h-[500px] flex items-center justify-center">
-      <div className="relative w-full max-w-md h-full">
+    <div className="relative w-full h-[600px] flex items-center justify-center">
+      <div className="relative w-full max-w-lg h-full flex items-center justify-center">
         {parts.map((part, index) => {
           const isHovered = hoveredIndex === index;
-          const baseOffset = index * 40; // Vertical offset for stacking
-          const baseRotation = (index - 3) * 2; // Slight rotation
+          const baseOffset = index * 50; // Vertical offset for stacking
+          const totalHeight = (parts.length - 1) * 50; // Total height of stack
           
           return (
             <motion.div
               key={part.src}
-              className="absolute top-1/2 left-1/2 cursor-pointer"
+              className="absolute cursor-pointer"
               style={{
                 transformOrigin: 'center center',
                 zIndex: isHovered ? 100 : 50 - index,
+                top: '50%',
+                left: '50%',
               }}
               initial={false}
               animate={{
-                x: isHovered ? '-50%' : `calc(-50% + ${(index % 2) * 20 - 10}px)`,
-                y: isHovered ? '-50%' : `calc(-50% + ${baseOffset - 120}px)`,
-                rotate: isHovered ? 0 : baseRotation,
-                scale: isHovered ? 1.15 : 1,
+                x: '-50%',
+                y: isHovered ? '-50%' : `calc(-50% + ${baseOffset - totalHeight / 2}px)`,
+                rotate: 0,
+                scale: isHovered ? 1.2 : 1,
               }}
               transition={{
                 type: 'spring',
@@ -168,10 +170,10 @@ function PartsStackVisualization() {
                 className="rounded-xl overflow-hidden shadow-2xl border-4"
                 style={{
                   borderColor: part.color,
-                  width: '280px',
-                  height: '320px',
+                  width: '360px',
+                  height: '400px',
                 }}
-                whileHover={{ boxShadow: `0 20px 60px -10px ${part.color}80` }}
+                whileHover={{ boxShadow: `0 25px 70px -15px ${part.color}80` }}
               >
                 <img
                   src={part.src}
@@ -179,16 +181,16 @@ function PartsStackVisualization() {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none">
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
                     <motion.p
-                      className="text-white font-bold text-lg"
+                      className="text-white font-bold text-xl"
                       initial={{ opacity: 0.7 }}
                       animate={{ opacity: isHovered ? 1 : 0.7 }}
                     >
                       {part.title}
                     </motion.p>
                     <motion.p
-                      className="text-slate-300 text-sm"
+                      className="text-slate-300 text-base"
                       initial={{ opacity: 0.5 }}
                       animate={{ opacity: isHovered ? 1 : 0.5 }}
                     >
