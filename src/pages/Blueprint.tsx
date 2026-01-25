@@ -135,11 +135,11 @@ function PartsStackVisualization() {
 
   return (
     <div className="relative w-full h-[500px] flex items-center justify-center">
-      <div className="relative w-full max-w-2xl h-96">
+      <div className="relative w-full max-w-md h-full">
         {parts.map((part, index) => {
           const isHovered = hoveredIndex === index;
-          const baseOffset = index * 35; // Horizontal offset for stacking
-          const baseRotation = (index - 3) * 3; // Slight rotation
+          const baseOffset = index * 40; // Vertical offset for stacking
+          const baseRotation = (index - 3) * 2; // Slight rotation
           
           return (
             <motion.div
@@ -151,8 +151,8 @@ function PartsStackVisualization() {
               }}
               initial={false}
               animate={{
-                x: isHovered ? '-50%' : `calc(-50% + ${baseOffset}px)`,
-                y: isHovered ? '-50%' : `calc(-50% + ${(index % 2) * 20}px)`,
+                x: isHovered ? '-50%' : `calc(-50% + ${(index % 2) * 20 - 10}px)`,
+                y: isHovered ? '-50%' : `calc(-50% + ${baseOffset - 120}px)`,
                 rotate: isHovered ? 0 : baseRotation,
                 scale: isHovered ? 1.15 : 1,
               }}
