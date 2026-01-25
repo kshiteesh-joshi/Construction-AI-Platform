@@ -363,7 +363,7 @@ export function Blueprint() {
               </div>
               
               <div
-                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${
+                className={`border-2 border-dashed rounded-xl overflow-hidden text-center cursor-pointer transition-all duration-300 relative ${
                   isDragging
                     ? 'border-primary-500 bg-primary-500/10'
                     : uploadedFiles.scene
@@ -380,15 +380,17 @@ export function Blueprint() {
                 onDrop={(e) => handleDrop(e, 'scene')}
               >
                 {uploadedFiles.scene ? (
-                  <div className="flex flex-col items-center">
-                    <div className="w-24 h-24 rounded-lg overflow-hidden mb-3 ring-2 ring-primary-500/30">
-                      <img src={uploadedFiles.scene} alt="Scene" className="w-full h-full object-cover" />
+                  <div className="relative w-full h-64">
+                    <img src={uploadedFiles.scene} alt="Scene" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center p-4">
+                      <div className="text-center">
+                        <p className="text-white font-medium">Scene Image Loaded</p>
+                        <p className="text-sm text-slate-300 mt-1">Click to reload</p>
+                      </div>
                     </div>
-                    <p className="text-white font-medium">Scene Image Loaded</p>
-                    <p className="text-sm text-slate-500 mt-1">Click to reload</p>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center">
+                  <div className="flex flex-col items-center py-12">
                     <div className="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mb-3">
                       <Upload className="w-8 h-8 text-slate-500" />
                     </div>
@@ -412,7 +414,7 @@ export function Blueprint() {
               </div>
               
               <div
-                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${
+                className={`border-2 border-dashed rounded-xl overflow-hidden text-center cursor-pointer transition-all duration-300 relative ${
                   uploadedFiles.blueprint
                     ? 'border-accent-500/50 bg-accent-500/5'
                     : 'border-slate-700/50 hover:border-accent-500/50 hover:bg-slate-800/30'
@@ -426,15 +428,17 @@ export function Blueprint() {
                 onDrop={(e) => handleDrop(e, 'blueprint')}
               >
                 {uploadedFiles.blueprint ? (
-                  <div className="flex flex-col items-center">
-                    <div className="w-24 h-24 rounded-lg overflow-hidden mb-3 ring-2 ring-accent-500/30">
-                      <img src={uploadedFiles.blueprint} alt="Blueprint" className="w-full h-full object-cover" />
+                  <div className="relative w-full h-64">
+                    <img src={uploadedFiles.blueprint} alt="Blueprint" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center p-4">
+                      <div className="text-center">
+                        <p className="text-white font-medium">Blueprint Loaded</p>
+                        <p className="text-sm text-slate-300 mt-1">Click to reload</p>
+                      </div>
                     </div>
-                    <p className="text-white font-medium">Blueprint Loaded</p>
-                    <p className="text-sm text-slate-500 mt-1">Click to reload</p>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center">
+                  <div className="flex flex-col items-center py-12">
                     <div className="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mb-3">
                       <Upload className="w-8 h-8 text-slate-500" />
                     </div>
