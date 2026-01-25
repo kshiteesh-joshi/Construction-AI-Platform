@@ -817,13 +817,13 @@ export function Blueprint() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="relative max-w-6xl w-full max-h-[90vh] bg-slate-900 rounded-2xl overflow-hidden shadow-2xl"
+              className="relative max-w-fit max-h-[95vh] bg-slate-900 rounded-2xl overflow-hidden shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-6 bg-gradient-to-b from-slate-900 to-transparent">
-                <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-6 h-6 text-primary-400" />
+              <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 bg-gradient-to-b from-slate-900/95 to-transparent">
+                <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-primary-400" />
                   Compliance Audit Report
                 </h3>
                 <div className="flex items-center gap-2">
@@ -857,12 +857,11 @@ export function Blueprint() {
               </div>
 
               {/* Image */}
-              <div className="w-full h-[90vh] overflow-auto flex items-start justify-center p-4 bg-slate-800/50">
+              <div className="w-full max-h-[95vh] overflow-auto flex items-center justify-center">
                 <img
                   src="/audit.png"
                   alt="Compliance Audit Report"
-                  className="max-w-full h-auto object-contain"
-                  style={{ maxHeight: 'calc(90vh - 6rem)' }}
+                  className="w-auto h-auto max-w-full max-h-[95vh] object-contain"
                 />
               </div>
             </motion.div>
