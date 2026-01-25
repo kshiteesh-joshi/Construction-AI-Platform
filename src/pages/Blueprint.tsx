@@ -119,7 +119,93 @@ const mockComplianceChecks: ComplianceCheck[] = [
   { name: 'Energy Efficiency Standards', status: 'pass', description: 'Energy consumption 45% below baseline' },
 ];
 
-// Generate a simple Lego-style block grid for visualization
+// Parts documentation component with stacked cards
+function PartsStackVisualization() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  
+  const parts = [
+    { src: '/part1.jpg', title: 'Part 1', subtitle: 'Foundation Base', color: '#a3c585' },
+    { src: '/part2.jpg', title: 'Part 2', subtitle: 'Wall Frame', color: '#c4a574' },
+    { src: '/part3.jpg', title: 'Part 3', subtitle: 'Floor System', color: '#e8dcc8' },
+    { src: '/part4.jpg', title: 'Part 4', subtitle: 'Roof Structure', color: '#d4c8b8' },
+    { src: '/part.2.jpg', title: 'Detail 2', subtitle: 'Joint Connection', color: '#9ca3af' },
+    { src: '/part.3.jpg', title: 'Detail 3', subtitle: 'Panel Assembly', color: '#d4a574' },
+    { src: '/part.4.jpg', title: 'Detail 4', subtitle: 'Finish Layer', color: '#e8d59c' },
+  ];
+
+  return (
+    <div className="relative w-full h-[500px] flex items-center justify-center">
+      <div className="relative w-full max-w-2xl h-96">
+        {parts.map((part, index) => {
+          const isHovered = hoveredIndex === index;
+          const baseOffset = index * 35; // Horizontal offset for stacking
+          const baseRotation = (index - 3) * 3; // Slight rotation
+          
+          return (
+            <motion.div
+              key={part.src}
+              className="absolute top-1/2 left-1/2 cursor-pointer"
+              style={{
+                transformOrigin: 'center center',
+                zIndex: isHovered ? 100 : 50 - index,
+              }}
+              initial={false}
+              animate={{
+                x: isHovered ? '-50%' : `calc(-50% + ${baseOffset}px)`,
+                y: isHovered ? '-50%' : `calc(-50% + ${(index % 2) * 20}px)`,
+                rotate: isHovered ? 0 : baseRotation,
+                scale: isHovered ? 1.15 : 1,
+              }}
+              transition={{
+                type: 'spring',
+                stiffness: 300,
+                damping: 25,
+              }}
+              onHoverStart={() => setHoveredIndex(index)}
+              onHoverEnd={() => setHoveredIndex(null)}
+            >
+              <motion.div
+                className="rounded-xl overflow-hidden shadow-2xl border-4"
+                style={{
+                  borderColor: part.color,
+                  width: '280px',
+                  height: '320px',
+                }}
+                whileHover={{ boxShadow: `0 20px 60px -10px ${part.color}80` }}
+              >
+                <img
+                  src={part.src}
+                  alt={part.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none">
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <motion.p
+                      className="text-white font-bold text-lg"
+                      initial={{ opacity: 0.7 }}
+                      animate={{ opacity: isHovered ? 1 : 0.7 }}
+                    >
+                      {part.title}
+                    </motion.p>
+                    <motion.p
+                      className="text-slate-300 text-sm"
+                      initial={{ opacity: 0.5 }}
+                      animate={{ opacity: isHovered ? 1 : 0.5 }}
+                    >
+                      {part.subtitle}
+                    </motion.p>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// Generate a simple Lego-style block grid for visualization (kept for reference, not used)
 function LegoVisualization() {
   const blocks = [];
   const materials: MaterialType[] = ['bamboo', 'recycled-wood', 'hemp-concrete', 'mycelium', 'recycled-steel', 'cork'];
@@ -587,16 +673,7 @@ export function Blueprint() {
                   </motion.button>
                 </div>
                 
-                <LegoVisualization />
-                
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {Object.entries(MATERIAL_COLORS).slice(0, 6).map(([key, value]) => (
-                    <div key={key} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 border border-slate-700/30">
-                      <div className="w-3 h-3 rounded" style={{ backgroundColor: value.light }} />
-                      <span className="text-xs text-slate-400">{value.name}</span>
-                    </div>
-                  ))}
-                </div>
+                <PartsStackVisualization />
               </div>
 
               {/* Material requirements */}
