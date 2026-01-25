@@ -913,7 +913,7 @@ export function Blueprint() {
                     onClick={() => {
                       const link = document.createElement('a');
                       link.href = '/audit.png';
-                      link.download = 'Lithos_AI_Compliance_Audit_Report.png';
+                      link.download = 'Lith_OS_Compliance_Audit_Report.png';
                       document.body.appendChild(link);
                       link.click();
                       document.body.removeChild(link);

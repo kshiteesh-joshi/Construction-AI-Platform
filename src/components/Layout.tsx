@@ -38,13 +38,13 @@ export function Layout() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary-400/30 to-accent-500/30 rounded-2xl blur-xl" />
               <img 
                 src="/new-logo.png" 
-                alt="Lithos.AI Logo" 
+                alt="Lith.OS Logo" 
                 className="relative w-12 h-12 rounded-2xl object-cover shadow-lg ring-1 ring-white/10"
               />
             </motion.div>
             <div>
               <h1 className="font-display font-bold text-xl text-white tracking-tight">
-                Lithos<span className="text-gradient-primary">.AI</span>
+                Lith<span className="text-gradient-primary">.OS</span>
               </h1>
               <p className="text-xs text-slate-500 flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-primary-400" />
