@@ -215,6 +215,7 @@ export function Blueprint() {
   const [uploadedFiles, setUploadedFiles] = useState<{ scene?: string; blueprint?: string }>({});
   const [isDragging, setIsDragging] = useState(false);
   const [showAuditPreview, setShowAuditPreview] = useState(false);
+  const [show3DView, setShow3DView] = useState(false);
 
   const handleAutoLoadImages = () => {
     setUploadedFiles({
@@ -577,7 +578,9 @@ export function Blueprint() {
                   </h3>
                   <motion.button 
                     className="btn-secondary text-sm py-2 px-4 flex items-center gap-2"
+                    onClick={() => setShow3DView(true)}
                     whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     <Eye className="w-4 h-4" />
                     3D View
@@ -863,6 +866,105 @@ export function Blueprint() {
                   alt="Compliance Audit Report"
                   className="w-auto h-auto max-w-full max-h-[95vh] object-contain"
                 />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 3D View Modal */}
+      <AnimatePresence>
+        {show3DView && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setShow3DView(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="relative w-full max-w-7xl max-h-[95vh] bg-slate-900 rounded-2xl overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-slate-700/50 bg-slate-900/95">
+                <h3 className="text-xl font-semibold text-white flex items-center gap-2">
+                  <Box className="w-6 h-6 text-primary-400" />
+                  3D Modular Parts View
+                </h3>
+                <motion.button
+                  onClick={() => setShow3DView(false)}
+                  className="p-2 rounded-lg bg-slate-800/70 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </motion.button>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 overflow-y-auto max-h-[calc(95vh-5rem)]">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Left: 3D View */}
+                  <div className="lg:col-span-2">
+                    <div className="rounded-xl overflow-hidden border border-slate-700/50 bg-slate-800/30">
+                      <img
+                        src="/3Dview.png"
+                        alt="3D View"
+                        className="w-full h-auto object-contain"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Right: Parts Documentation */}
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                      <Layers className="w-5 h-5 text-accent-400" />
+                      Parts Documentation
+                    </h4>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { src: '/part1.jpg', title: 'Part 1', subtitle: 'Foundation Base' },
+                        { src: '/part2.jpg', title: 'Part 2', subtitle: 'Wall Frame' },
+                        { src: '/part3.jpg', title: 'Part 3', subtitle: 'Floor System' },
+                        { src: '/part4.jpg', title: 'Part 4', subtitle: 'Roof Structure' },
+                        { src: '/part.2.jpg', title: 'Detail 2', subtitle: 'Joint Connection' },
+                        { src: '/part.3.jpg', title: 'Detail 3', subtitle: 'Panel Assembly' },
+                        { src: '/part.4.jpg', title: 'Detail 4', subtitle: 'Finish Layer' },
+                      ].map((part, index) => (
+                        <motion.div
+                          key={part.src}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className="group relative rounded-lg overflow-hidden border border-slate-700/50 hover:border-primary-500/50 transition-all cursor-pointer bg-slate-800/40"
+                          whileHover={{ scale: 1.05, y: -4 }}
+                        >
+                          <div className="aspect-[4/3] overflow-hidden">
+                            <img
+                              src={part.src}
+                              alt={part.title}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="absolute bottom-0 left-0 right-0 p-2">
+                              <p className="text-white text-xs font-semibold">{part.title}</p>
+                              <p className="text-slate-300 text-[10px]">{part.subtitle}</p>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </motion.div>
