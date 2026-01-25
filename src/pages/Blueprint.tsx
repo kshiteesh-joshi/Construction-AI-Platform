@@ -212,23 +212,32 @@ type Step = 'upload' | 'processing' | 'result';
 export function Blueprint() {
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>('upload');
-  const [uploadedFiles, setUploadedFiles] = useState<{ scene?: File; blueprint?: File }>({});
+  const [uploadedFiles, setUploadedFiles] = useState<{ scene?: string; blueprint?: string }>({});
   const [isDragging, setIsDragging] = useState(false);
   const [showAuditPreview, setShowAuditPreview] = useState(false);
+
+  const handleAutoLoadImages = () => {
+    setUploadedFiles({
+      scene: '/scene_image.jpg',
+      blueprint: '/architecture_blueprint.png'
+    });
+  };
 
   const handleDrop = (e: React.DragEvent, type: 'scene' | 'blueprint') => {
     e.preventDefault();
     setIsDragging(false);
     const file = e.dataTransfer.files[0];
     if (file) {
-      setUploadedFiles((prev) => ({ ...prev, [type]: file }));
+      const url = URL.createObjectURL(file);
+      setUploadedFiles((prev) => ({ ...prev, [type]: url }));
     }
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, type: 'scene' | 'blueprint') => {
     const file = e.target.files?.[0];
     if (file) {
-      setUploadedFiles((prev) => ({ ...prev, [type]: file }));
+      const url = URL.createObjectURL(file);
+      setUploadedFiles((prev) => ({ ...prev, [type]: url }));
     }
   };
 
@@ -353,37 +362,41 @@ export function Blueprint() {
                 </div>
               </div>
               
-              <label
-                className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${
+              <div
+                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${
                   isDragging
                     ? 'border-primary-500 bg-primary-500/10'
                     : uploadedFiles.scene
                     ? 'border-primary-500/50 bg-primary-500/5'
                     : 'border-slate-700/50 hover:border-primary-500/50 hover:bg-slate-800/30'
                 }`}
+                onClick={() => {
+                  if (!uploadedFiles.scene) {
+                    handleAutoLoadImages();
+                  }
+                }}
                 onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={(e) => handleDrop(e, 'scene')}
               >
-                <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileSelect(e, 'scene')} />
                 {uploadedFiles.scene ? (
                   <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 rounded-full bg-primary-500/20 flex items-center justify-center mb-3">
-                      <CheckCircle2 className="w-8 h-8 text-primary-400" />
+                    <div className="w-24 h-24 rounded-lg overflow-hidden mb-3 ring-2 ring-primary-500/30">
+                      <img src={uploadedFiles.scene} alt="Scene" className="w-full h-full object-cover" />
                     </div>
-                    <p className="text-white font-medium">{uploadedFiles.scene.name}</p>
-                    <p className="text-sm text-slate-500 mt-1">Click to reselect</p>
+                    <p className="text-white font-medium">Scene Image Loaded</p>
+                    <p className="text-sm text-slate-500 mt-1">Click to reload</p>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
                     <div className="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mb-3">
                       <Upload className="w-8 h-8 text-slate-500" />
                     </div>
-                    <p className="text-slate-300">Drag file here or click to upload</p>
-                    <p className="text-sm text-slate-500 mt-1">Supports JPG, PNG, WebP</p>
+                    <p className="text-slate-300">Click to load scene image</p>
+                    <p className="text-sm text-slate-500 mt-1">Or drag & drop your own image</p>
                   </div>
                 )}
-              </label>
+              </div>
             </div>
 
             {/* Blueprint upload */}
@@ -398,34 +411,38 @@ export function Blueprint() {
                 </div>
               </div>
               
-              <label
-                className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${
+              <div
+                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${
                   uploadedFiles.blueprint
                     ? 'border-accent-500/50 bg-accent-500/5'
                     : 'border-slate-700/50 hover:border-accent-500/50 hover:bg-slate-800/30'
                 }`}
+                onClick={() => {
+                  if (!uploadedFiles.blueprint) {
+                    handleAutoLoadImages();
+                  }
+                }}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleDrop(e, 'blueprint')}
               >
-                <input type="file" className="hidden" accept=".dwg,.dxf,.pdf,image/*" onChange={(e) => handleFileSelect(e, 'blueprint')} />
                 {uploadedFiles.blueprint ? (
                   <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 rounded-full bg-accent-500/20 flex items-center justify-center mb-3">
-                      <CheckCircle2 className="w-8 h-8 text-accent-400" />
+                    <div className="w-24 h-24 rounded-lg overflow-hidden mb-3 ring-2 ring-accent-500/30">
+                      <img src={uploadedFiles.blueprint} alt="Blueprint" className="w-full h-full object-cover" />
                     </div>
-                    <p className="text-white font-medium">{uploadedFiles.blueprint.name}</p>
-                    <p className="text-sm text-slate-500 mt-1">Click to reselect</p>
+                    <p className="text-white font-medium">Blueprint Loaded</p>
+                    <p className="text-sm text-slate-500 mt-1">Click to reload</p>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
                     <div className="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mb-3">
                       <Upload className="w-8 h-8 text-slate-500" />
                     </div>
-                    <p className="text-slate-300">Drag file here or click to upload</p>
-                    <p className="text-sm text-slate-500 mt-1">Supports DWG, DXF, PDF</p>
+                    <p className="text-slate-300">Click to load blueprint</p>
+                    <p className="text-sm text-slate-500 mt-1">Or drag & drop your own file</p>
                   </div>
                 )}
-              </label>
+              </div>
             </div>
 
             {/* Generate button */}
