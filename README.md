@@ -31,10 +31,7 @@ A modern SaaS platform for renewable material construction management, featuring
 
 Watch a demonstration of the platform in action:
 
-<video width="800" controls>
-  <source src="readme_images/Screen%20Recording%202026-01-25%20at%203.08.34%20PM.mov" type="video/quicktime">
-  Your browser does not support the video tag. [Download the video](readme_images/Screen%20Recording%202026-01-25%20at%203.08.34%20PM.mov) instead.
-</video>
+![Demo GIF](readme_images/demo.gif)
 
 ## 🚀 Tech Stack
 
