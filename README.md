@@ -107,7 +107,6 @@ This project is private and proprietary.
 
 ## 🔗 Links
 
-- Repository: [github.com/Justin0504/Lithos.AI](https://github.com/Justin0504/Lithos.AI)
 - Demo: http://localhost:5173
 
 ---
